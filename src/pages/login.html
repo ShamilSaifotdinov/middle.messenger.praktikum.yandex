@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Авторизация</title>
+</head>
+
+<body>
+    {{#> auth }}
+        {{#> frame className="auth_frame" }}
+            <h4 class="auth_title">Вход</h4>
+            <form class="auth_form">
+                {{> input name="login" label="Логин" type="text"}}
+                {{> input name="password" label="Пароль" type="password"}}
+            </form>
+            {{> button_link title="Войти" className="button-link-blue" href="/profile.html"}}
+            {{> link title="Регистрация" href="./registry.html"}}
+        {{/frame}}
+    {{/auth}}    
+    <script type="module" src="../../main.js"></script>
+</body>
+
+</html>

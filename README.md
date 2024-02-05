@@ -1,3 +1,8 @@
+Прототипы экранов:
+https://www.figma.com/file/7YpDCAyyN1pABc652yZdAn/middle.messenger.praktikum.yandex?type=design&node-id=0%3A1&mode=design&t=pxa95Mdaqbfw1gZP-1
+
+---
+
 ### Ветка, в которой делаете задания спринта, должна называться sprint_i, где i - номер спринта. Не переименовывайте её.
 
 ### Откройте pull request в ветку main из ветки, где вы разрабатывали проект, и добавьте ссылку на этот pr в README.md в ветке main. 

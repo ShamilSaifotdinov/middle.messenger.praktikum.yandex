@@ -1,0 +1,19 @@
+.button-link {
+    color: white;
+    background-color: black;
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+    text-decoration: none;
+    transition: opacity .25s;
+}
+
+.button-link:hover
+{
+    color: white;
+    opacity: 0.5;
+}
+
+.button-link-blue {
+    background-color: #007AFF;
+    border-color: #007AFF;
+}
