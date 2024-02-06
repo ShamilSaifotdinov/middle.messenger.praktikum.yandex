@@ -1,6 +1,22 @@
 # Веб-приложения «Чат»
 
-Простой чат для общения
+Простое приложение для общения
+
+---
+
+Главная: https://calm-buttercream-294e4a.netlify.app/
+
+Авторизация: https://calm-buttercream-294e4a.netlify.app/pages/login
+
+Регистрация: https://calm-buttercream-294e4a.netlify.app/pages/registry
+
+Список чатов: https://calm-buttercream-294e4a.netlify.app/pages/chats
+
+Настройка профиля: https://calm-buttercream-294e4a.netlify.app/pages/profile
+
+Ошибка 404: https://calm-buttercream-294e4a.netlify.app/pages/404
+
+Ошибка 5**: https://calm-buttercream-294e4a.netlify.app/pages/500
 
 ---
 
@@ -15,14 +31,3 @@ npm run dev
 ```
 npm run start
 ```
-
----
-
-### Ветка, в которой делаете задания спринта, должна называться sprint_i, где i - номер спринта. Не переименовывайте её.
-
-### Откройте pull request в ветку main из ветки, где вы разрабатывали проект, и добавьте ссылку на этот pr в README.md в ветке main. 
-### ВАЖНО: pull request должен называться “Sprint i” (i — номер спринта).
-
-### Например, задания для проектной работы во втором спринте вы делаете в ветке sprint_2. Открываете из неё pull request в ветку main. Ссылку на этот pr добавляете в README.md в ветке main. После этого на платформе Практикума нажимаете «Проверить задание».
-
-### Также не забудьте проверить, что репозиторий публичный.
