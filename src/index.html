@@ -5,14 +5,22 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <title>{{ title }}</title>
 </head>
 
 <body>
-    <a href="/pages/login.html">Авторизация</a>
-    <a href="/pages/registry.html">Регистрация</a>
-    <a href="/pages/404.html">404</a>
-    <a href="/pages/500.html">500</a>
+    <div class="auth">
+        {{#> frame className="auth_frame" }}
+            <h4 class="auth_title">Экраны</h4>
+            {{> link title="Авторизация" href="/pages/login.html"}}
+            {{> link title="Регистрация" href="/pages/registry.html"}}
+            {{> link title="Список чатов" href="/pages/chats.html"}}
+            {{> link title="Настройки профиля" href="/pages/profile.html"}}
+            {{> link title="404" href="/pages/404.html"}}
+            {{> link title="500" href="/pages/500.html"}}
+        {{/frame}}
+    </div>
+    <script type="module" src="./main.js"></script>
 </body>
 
 </html>

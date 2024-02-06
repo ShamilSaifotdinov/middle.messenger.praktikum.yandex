@@ -5,13 +5,13 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Авторизация</title>
+    <title>{{ title }}</title>
 </head>
 
 <body>
-    {{#> auth }}
+    <div class="auth">
         {{> error code="404" msg="Упс... не туда" face="¯\_(ツ)_/¯" }}
-    {{/auth}}
+    </div>
     <script type="module" src="../main.js"></script>
 </body>
 

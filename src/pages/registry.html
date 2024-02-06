@@ -5,11 +5,11 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Регистрация</title>
+    <title>{{ title }}</title>
 </head>
 
 <body>
-    {{#> auth }}
+    <div class="auth">
         {{#> frame className="auth_frame" }}
             <h4 class="auth_title">Регистрация</h4>
             <form class="auth_form">
@@ -21,11 +21,11 @@
                 {{> input name="password" label="Пароль" type="password"}}
                 {{> input name="password" label="Повторите пароль" type="password"}}
             </form>
-            {{> button_link title="Зарегистрироваться" className="button-link-blue" href="/profile.html"}}
+            {{> button_link title="Зарегистрироваться" className="button-link-blue" href="./chats.html"}}
             {{> link title="Войти" href="./login.html"}}
         {{/frame}}
-    {{/auth}}    
-    <script type="module" src="../../main.js"></script>
+    </div>
+    <script type="module" src="../main.js"></script>
 </body>
 
 </html>

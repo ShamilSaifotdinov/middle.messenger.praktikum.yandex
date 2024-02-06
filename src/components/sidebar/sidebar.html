@@ -1,0 +1,28 @@
+<div class="sidebar">
+    <header class="sidebar-header">
+        <a class="sidebar-header_avatar" href="./profile.html"></a>
+        <form class="sidebar-header_search">
+            {{> input name="search" type="text" placeholder="Поиск" className="sidebar-header_search-input"}}
+        </form>
+        <button class="sidebar-header_new-chat" title="Создать чат"></button>
+    </header>
+    <ul class="chatlist">
+        {{#each chats }}
+            <li class="chatlist_row">
+                <a href="#" class="chatlist-item {{#if active }}chatlist-item-active{{/if }}">
+                    <div class="chatlist-item_avatar"></div>
+                    <div class="chatlist-item_text">
+                        <div class="chatlist-item_header">
+                            <span class="chatlist-item_name"><b>{{ name }}</b></span>
+                            <span class="chatlist-item_time">{{ time }}</span>
+                        </div>
+                        <div class="chatlist-item_content">
+                            <span class="chatlist-item_msg">{{ msg }}</span>
+                            {{#if count }}<div class="chatlist-item_msg-count">{{ count }}</div>{{/if }}
+                        </div>
+                    </div>
+                </a>
+            </li>
+        {{/each }}
+    </ul>
+</div>

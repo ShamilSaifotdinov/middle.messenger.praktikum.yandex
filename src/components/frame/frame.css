@@ -4,7 +4,7 @@
     flex-flow: column;
     align-items: center;
     width: 25rem;
-    background-color: white;
+    background-color: $main;
     padding: 2.25rem;
     border-radius: .5rem;
 }
