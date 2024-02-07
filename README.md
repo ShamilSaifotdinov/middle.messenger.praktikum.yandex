@@ -1,4 +1,4 @@
-PR Sprint 1: https://github.com/ShamilSaifotdinov/middle.messenger.praktikum.yandex/pull/2
+PR Sprint 1: https://github.com/ShamilSaifotdinov/middle.messenger.praktikum.yandex/pull/3
 
 ---
 
