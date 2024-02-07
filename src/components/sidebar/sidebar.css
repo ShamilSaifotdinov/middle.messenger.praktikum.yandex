@@ -44,12 +44,16 @@
     height: 1.5rem;
 }
 
+.chats
+{
+    flex: 1;
+    overflow: auto;
+}
+
 .chatlist
 {
     margin: 0;
     padding: 0;
-    flex: 1;
-    overflow: auto;
 }
 
 .chatlist_row

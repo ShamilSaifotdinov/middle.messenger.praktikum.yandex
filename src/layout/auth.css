@@ -25,3 +25,18 @@
     flex-flow: column;
     gap: .725rem;
 }
+
+.pages_list
+{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.pages_item
+{
+    list-style: none;
+}

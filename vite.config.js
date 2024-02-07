@@ -32,6 +32,7 @@ const profile = {
 const pageData = {
     "/index.html": {
         title: "Страницы",
+        pages: [],
     },
     "/pages/login.html": {
         title: "Авторизация",
@@ -67,6 +68,9 @@ const pageData = {
         title: "Ошибка 500"
     },
 }
+
+let pages = Object.entries(pageData)
+pageData["/index.html"].pages = pages.slice(1, pages.length).map(([key, value]) => ({ href: key, title: value.title }))
 
 export default defineConfig({
     root: resolve(__dirname, "src"),

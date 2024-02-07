@@ -6,23 +6,25 @@
         </form>
         <button class="sidebar-header_new-chat" title="Создать чат"></button>
     </header>
-    <ul class="chatlist">
-        {{#each chats }}
-            <li class="chatlist_row">
-                <a href="#" class="chatlist-item {{#if active }}chatlist-item-active{{/if }}">
-                    <div class="chatlist-item_avatar"></div>
-                    <div class="chatlist-item_text">
-                        <div class="chatlist-item_header">
-                            <span class="chatlist-item_name"><b>{{ name }}</b></span>
-                            <span class="chatlist-item_time">{{ time }}</span>
+    <nav class="chats">
+        <ul class="chatlist">
+            {{#each chats }}
+                <li class="chatlist_row">
+                    <a href="#" class="chatlist-item {{#if active }}chatlist-item-active{{/if }}">
+                        <div class="chatlist-item_avatar"></div>
+                        <div class="chatlist-item_text">
+                            <div class="chatlist-item_header">
+                                <span class="chatlist-item_name"><b>{{ name }}</b></span>
+                                <span class="chatlist-item_time">{{ time }}</span>
+                            </div>
+                            <div class="chatlist-item_content">
+                                <span class="chatlist-item_msg">{{ msg }}</span>
+                                {{#if count }}<div class="chatlist-item_msg-count">{{ count }}</div>{{/if }}
+                            </div>
                         </div>
-                        <div class="chatlist-item_content">
-                            <span class="chatlist-item_msg">{{ msg }}</span>
-                            {{#if count }}<div class="chatlist-item_msg-count">{{ count }}</div>{{/if }}
-                        </div>
-                    </div>
-                </a>
-            </li>
-        {{/each }}
-    </ul>
+                    </a>
+                </li>
+            {{/each }}
+        </ul>
+    </nav>
 </div>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8" />
@@ -9,17 +9,18 @@
 </head>
 
 <body>
-    <div class="auth">
+    <main class="auth">
         {{#> frame className="auth_frame" }}
             <h4 class="auth_title">Экраны</h4>
-            {{> link title="Авторизация" href="/pages/login.html"}}
-            {{> link title="Регистрация" href="/pages/registry.html"}}
-            {{> link title="Список чатов" href="/pages/chats.html"}}
-            {{> link title="Настройки профиля" href="/pages/profile.html"}}
-            {{> link title="404" href="/pages/404.html"}}
-            {{> link title="500" href="/pages/500.html"}}
+            <nav class="pages">
+                <ul class="pages_list">
+                    {{#each pages}}
+                        <li class="pages_item">{{> link title=title href=href }}</li>
+                    {{/each }}
+                </ul>
+            </nav>
         {{/frame}}
-    </div>
+    </main>
     <script type="module" src="./main.js"></script>
 </body>
 
