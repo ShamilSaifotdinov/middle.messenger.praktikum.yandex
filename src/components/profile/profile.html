@@ -1,0 +1,21 @@
+<div class="profile">
+    <header class="profile_header">
+        <a class="profile_back" href="./chats.html"></a>
+    </header>
+    <section class="profile_container">
+        <div class="profile_content">
+            <div class="profile_avatar"></div>
+            <form class="profile_form">
+                <div class="profile-details">
+                    {{#each profile }}
+                    <div class="profile-details_item">
+                        <span class="profile-details_title">{{ title }}</span>
+                        {{> input name=name type="text" classNameForm="profile-details_input" value=value }}
+                    </div>
+                    {{/each }}
+                </div>
+                {{> button_link title="Сохранить изменения" className="button-link-blue profile-details_button" href="./chats.html"}}
+            </form>
+        </div>
+    </section>
+</div>

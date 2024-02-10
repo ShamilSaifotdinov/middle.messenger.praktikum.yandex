@@ -1,0 +1,26 @@
+.input-form
+{
+    display: flex;
+    flex-flow: column;
+    gap: .5rem;
+}
+
+.input-form_label
+{
+    font-size: 0.833rem;
+}
+
+.input-form_input
+{
+    width: 100%;
+    height: 2.25rem;
+    border: 1px solid $deep_grey;
+    border-radius: .5rem;
+    padding: .5rem;
+    font-size: 1rem;
+}
+
+.input-form_input:focus
+{
+    outline: none;
+}

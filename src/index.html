@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title }}</title>
+</head>
+
+<body>
+    <main class="auth">
+        {{#> frame className="auth_frame" }}
+            <h4 class="auth_title">Экраны</h4>
+            <nav class="pages">
+                <ul class="pages_list">
+                    {{#each pages}}
+                        <li class="pages_item">{{> link title=title href=href }}</li>
+                    {{/each }}
+                </ul>
+            </nav>
+        {{/frame}}
+    </main>
+    <script type="module" src="./main.js"></script>
+</body>
+
+</html>

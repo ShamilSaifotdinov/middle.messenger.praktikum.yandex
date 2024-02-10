@@ -1,0 +1,21 @@
+.button-link
+{
+    display: inline-block;
+    color: $main;
+    background-color: black;
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+    text-decoration: none;
+    transition: opacity .25s;
+}
+
+.button-link:hover
+{
+    opacity: 0.5;
+}
+
+.button-link-blue
+{
+    background-color: $blue;
+    border-color: $blue;
+}

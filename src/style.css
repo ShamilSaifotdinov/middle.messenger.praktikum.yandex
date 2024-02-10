@@ -1,0 +1,30 @@
+@import "./components/button_link/button_link.css";
+@import "./components/frame/frame.css";
+@import "./components/input/input.css";
+@import "./components/link/link.css";
+@import "./components/sidebar/sidebar.css";
+@import "./components/chat/chat.css";
+@import "./components/profile/profile.css";
+
+@import "./layout/auth.css";
+@import "./layout/window.css";
+@import "./layout/error/error.css";
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+*
+{
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+  font-weight: normal;
+}
+  
+body
+{
+  margin: 0;
+}

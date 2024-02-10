@@ -1,0 +1,22 @@
+.error-page, .error-page_text
+{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+.error-page
+{
+    gap: 2.5rem;
+}
+.error-page_text
+{
+    gap: 1rem;    
+}
+.error-page_code, .error-page_msg, .error-page_face
+{
+    margin: 0;
+}
+.error-page_code
+{
+    font-size: 4rem;
+}
