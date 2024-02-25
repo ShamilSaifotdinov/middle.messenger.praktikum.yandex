@@ -7,23 +7,36 @@
     justify-content: center;
     align-items: center;
 }
+
 .auth_frame
 {
+    --gap-frame: 1.25rem;
+
     display: flex;
     flex-flow: column;
-    gap: 1.25rem;
+    gap: var(--gap-frame);
 }
+
 .auth_title
 {
     margin: 0;
     font-size: 1.728rem;
 }
+
 .auth_form
 {
+    --gap-form: .725rem;
+
     width: 100%;
     display: flex;
     flex-flow: column;
-    gap: .725rem;
+    gap: var(--gap-form);
+}
+
+.auth_submit
+{
+    margin-top: calc(var(--gap-frame) - var(--gap-form));
+    align-self: center;
 }
 
 .pages_list

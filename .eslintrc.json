@@ -1,0 +1,16 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint"],
+    "rules": {
+        "@typescript-eslint/no-unused-vars": 2,
+        "max-len": [ 1, 100 ],
+        "max-params": [ 2, 3 ],
+        "semi": "off",
+        "@typescript-eslint/semi": ["error", "never"],
+        "quotes": ["error", "double"]
+    },
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 2020
+    }
+}

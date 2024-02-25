@@ -1,0 +1,37 @@
+.chat-input
+{
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.chat-input_input
+{
+    padding: 1rem;
+    border: none;
+    border-radius: 1rem;
+    font-size: 1rem;
+    flex: 1;
+}
+
+.chat-input_input:focus
+{
+    outline: none;
+}
+
+.chat-input_send
+{
+    background-color: $blue;
+    border: none;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 3rem;
+}
+
+.chat-input_send_icon
+{
+    background-image: url('@/arrow-up.svg');
+    margin: 0 auto;
+    width: 1.5rem;
+    height: 1.5rem;
+}

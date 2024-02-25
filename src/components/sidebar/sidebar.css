@@ -20,7 +20,7 @@
 {
     height: 2.375rem;
     width: 2.375rem;
-    background-image: url(@/avatar.svg);
+    background-image: url('@/avatar.svg');
 }
 
 .sidebar-header_search
@@ -30,14 +30,13 @@
 
 .sidebar-header_search-input
 {
-    background: url(@/search.svg) no-repeat;
+    background: url('@/search.svg') no-repeat;
     background-position: center right 7px;
 }
 
 .sidebar-header_new-chat
 {
-    -webkit-mask-image: url(@/plus.svg);
-    mask-image: url(@/plus.svg);
+    mask-image: url('@/plus.svg');
     background-color: $deep_grey;
     border: none;
     width: 1.5rem;
