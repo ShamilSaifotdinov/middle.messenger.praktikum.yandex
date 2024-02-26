@@ -134,7 +134,7 @@ if (window.location.pathname === "/login.html") {
 } else if (window.location.pathname === "/404.html") {
     route("/404.html", pageData, new ErrorPage(pageData["/404.html"]))
 } else if (window.location.pathname === "/500.html") {
-    route("/404.html", pageData, new ErrorPage(pageData["/500.html"]))
+    route("/500.html", pageData, new ErrorPage(pageData["/500.html"]))
 } else {
     route("*", pageData, new Index({ pages: pageData["/index.html"].pages }))
 }
