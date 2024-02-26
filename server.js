@@ -10,6 +10,10 @@ const PORT = 3000
 
 app.use(express.static(resolve(__dirname, "dist")))
 
-app.listen(PORT, function () {
+app.use("/*", (req, res) => {
+    res.sendFile(resolve(__dirname, "dist/index.html"))
+})
+
+app.listen(PORT, () => {
     console.log(`Example app listening on port ${PORT}!`)
 })

@@ -9,7 +9,7 @@ interface PropsButton extends Props {
 
 export default class Button extends Block {
     constructor(props: PropsButton) {
-        let attrs: Record<string, string> = {
+        const attrs: Record<string, string> = {
             class: "button"
                 + (props.color ? ` button-${props.color}` : "")
                 + (props.class ? ` ${props.class}` : ""),
@@ -18,7 +18,7 @@ export default class Button extends Block {
 
         super("button", { ...props, attrs })
     }
-    
+
     render() {
         return this.compile("{{ text }}", this.props)
     }

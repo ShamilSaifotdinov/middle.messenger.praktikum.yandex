@@ -10,7 +10,7 @@ interface PropsForm extends Props {
 
 export default class Form extends Block {
     constructor(props: PropsForm) {
-        let attrs =  {
+        const attrs = {
             ...(props.class && { class: props.class })
         }
 
@@ -33,12 +33,11 @@ export default class Form extends Block {
 
     handleEvent(e : Event) {
         e.preventDefault()
-        e.stopPropagation()
 
         const data = Object.fromEntries(
             new FormData(this.element as HTMLFormElement).entries()
         )
-        
+
         const props = this.props as PropsForm
 
         if (props.onSubmit) {

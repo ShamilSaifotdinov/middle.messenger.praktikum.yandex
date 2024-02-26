@@ -8,6 +8,7 @@ export interface PropsDetailsItem extends Props {
     name: string
     value: string
     type?: string
+    pattern?: string
 }
 
 export default class DetailsRow extends Block {
@@ -20,6 +21,7 @@ export default class DetailsRow extends Block {
                 name: props.name,
                 value: props.value,
                 type: props.type,
+                ...(props.pattern && { pattern: props.pattern }),
                 field_class: "profile-details_input"
             })
         })

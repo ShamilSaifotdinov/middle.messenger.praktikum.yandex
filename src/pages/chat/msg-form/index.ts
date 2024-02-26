@@ -2,6 +2,9 @@ import Block from "../../../modules/block"
 import tmp from "./tmp.hbs?raw"
 import "./msg-form.css"
 import BaseInput from "../../../components/baseInput"
+import UserService from "../../../services/user-service"
+
+const userService = new UserService()
 
 export default class MsgForm extends Block {
     constructor() {
@@ -20,10 +23,19 @@ export default class MsgForm extends Block {
             })
         })
     }
-    
+
     handleSubmit(e: Event) {
         e.preventDefault()
-        console.log(e)
+
+        const data = Object.fromEntries(
+            new FormData(this.element as HTMLFormElement).entries()
+        )
+
+        userService.sendMessage(data)
+
+        const target = e.target as HTMLFormElement
+
+        target.reset()
     }
 
     render() {

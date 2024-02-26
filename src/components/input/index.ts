@@ -16,8 +16,10 @@ interface PropsInput extends Props {
 }
 
 export default class Input extends Block {
+    value: string = ""
+
     constructor(props: PropsInput) {
-        let attrs: Record<string, string> = {
+        const attrs: Record<string, string> = {
             name: props.name,
             ...(props.pattern && { pattern: props.pattern }),
             ...(props.placeholder && { placeholder: props.placeholder }),
@@ -25,9 +27,9 @@ export default class Input extends Block {
             type: props.type || "text",
             ...(props.required && { required: "" }),
             ...((props.state === false) && { "aria-invalid": "true" }),
-            class: "input-form_input" + (props.class ? ` ${props.class}` : ""),
+            class: "input-form_input" + (props.class ? ` ${props.class}` : "")
         }
-        
+
         super("div", {
             ...props,
             attrs: {
@@ -37,34 +39,34 @@ export default class Input extends Block {
                 attrs,
                 events: {
                     blur: (event: Event) => {
-                        if (props.onBlur)
-                        {
+                        this.value = (event.target as HTMLInputElement).value
+
+                        if (props.onBlur) {
                             props.onBlur((event.target as HTMLInputElement).value)
                         }
-                    },
-                },
+                    }
+                }
             })
         })
     }
 
     componentDidUpdate(oldProps: Props, newProps: Props) {
-        if (oldProps.state != newProps.state) {
+        if (oldProps.state !== newProps.state) {
             const input = this.children.input as Block
-            let new_attrs = { ...input._meta.props.attrs }
-            
-            if (newProps.state == false)
-            {
-                new_attrs["aria-invalid"] = "true"
+            const newAttrs = { ...input._meta.props.attrs }
+
+            if (newProps.state === false) {
+                newAttrs["aria-invalid"] = "true"
             } else {
-                new_attrs["aria-invalid"] = "false"
+                newAttrs["aria-invalid"] = "false"
             }
 
-            input.setProps({ attrs: new_attrs })
+            input.setProps({ attrs: newAttrs })
         }
 
         return true
     }
-    
+
     render() {
         return this.compile(tmp, this.props)
     }

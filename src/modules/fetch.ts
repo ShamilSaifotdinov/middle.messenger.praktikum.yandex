@@ -1,3 +1,10 @@
+const enum METHODS {
+    GET = "GET",
+    PUT = "PUT",
+    POST = "POST",
+    DELETE = "DELETE",
+}
+
 interface Options {
     method?: METHODS
     timeout?: number
@@ -10,21 +17,13 @@ interface OptionsRequest extends Options {
     method: METHODS
 }
 
-const enum METHODS {
-    GET = "GET",
-    PUT = "PUT",
-    POST = "POST",
-    DELETE = "DELETE",
-}
-
 function queryStringify(data: Record<string, unknown>) {
     let result = ""
 
-    Object.keys(data).forEach(key => {
+    Object.keys(data).forEach((key) => {
         if (result === "") {
             result += `?${key}=${data[key]}`
-        }
-        else {
+        } else {
             result += `&${key}=${data[key]}`
         }
     })
@@ -39,25 +38,25 @@ class HTTPTransport {
             Object.assign(options, { data: queryStringify(options.data) })
         }
 
-        return this.request(url, {...options, method: METHODS.GET}, options.timeout)
+        return this.request(url, { ...options, method: METHODS.GET }, options.timeout)
     }
 
     // Create
     post = (url: string, options: Options = {}): Promise<XMLHttpRequest> => {
-        console.log({url, options})
-        return this.request(url, {...options, method: METHODS.POST}, options.timeout)
+        console.log({ url, options })
+        return this.request(url, { ...options, method: METHODS.POST }, options.timeout)
     }
 
     // Update
     put = (url: string, options: Options = {}): Promise<XMLHttpRequest> => {
-        console.log({url, options})
-        return this.request(url, {...options, method: METHODS.PUT}, options.timeout)
+        console.log({ url, options })
+        return this.request(url, { ...options, method: METHODS.PUT }, options.timeout)
     }
 
     // Delete
     delete = (url: string, options: Options = {}): Promise<XMLHttpRequest> => {
-        console.log({url, options})
-        return this.request(url, {...options, method: METHODS.DELETE}, options.timeout)
+        console.log({ url, options })
+        return this.request(url, { ...options, method: METHODS.DELETE }, options.timeout)
     }
 
     request = (
@@ -67,7 +66,7 @@ class HTTPTransport {
     ): Promise<XMLHttpRequest> => {
         const { method, data, headers }: Options = options
 
-        console.log({url, method, data, headers, timeout})
+        console.log({ url, method, data, headers, timeout })
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest()
 
@@ -76,15 +75,15 @@ class HTTPTransport {
             } else {
                 xhr.open(method, url)
             }
-            
-            xhr.onload = function() {
+
+            xhr.onload = () => {
                 resolve(xhr)
             }
-    
+
             xhr.onabort = reject
             xhr.onerror = reject
             xhr.ontimeout = reject
-            
+
             if (method === METHODS.GET || !data) {
                 xhr.send()
             } else {
@@ -97,20 +96,17 @@ class HTTPTransport {
 export const HTTP = new HTTPTransport()
 
 export function fetchWithRetry(url: string, options: Options): Promise<XMLHttpRequest> {
-    let { retries=1 } = options
-	console.log({url, options, retries})
-    
+    let { retries = 1 } = options
+    console.log({ url, options, retries })
+
     const retry = (err: Error): Promise<XMLHttpRequest> => {
-        retries--
+        retries -= 1
 
         if (retries === 0) {
             throw err
+        } else {
+            return fetchWithRetry(url, { ...options, retries })
         }
-        else {
-            return fetchWithRetry(url, {...options, retries})
-        }
-
-
     }
     return new HTTPTransport().get(url, options).catch(retry)
 }

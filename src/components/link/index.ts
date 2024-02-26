@@ -10,7 +10,7 @@ export default class Link extends Block {
         super("a", {
             attrs: {
                 class: "link",
-                href: props.href || "#",
+                href: props.href || "#"
             },
             title: props.title
         })

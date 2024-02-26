@@ -13,8 +13,10 @@ export default class Index extends Block {
                 class: "auth"
             },
             links: [
-                ...props.pages.map((page: Record<string, string>) => 
-                    new Link({ href: page.href, title: page.title }))
+                ...props.pages.map((page: Record<string, string>) => new Link({
+                    href: page.href,
+                    title: page.title
+                }))
             ]
         })
     }

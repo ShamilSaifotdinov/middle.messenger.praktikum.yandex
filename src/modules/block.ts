@@ -1,17 +1,17 @@
-import EventBus from "./event-bus"
 import { v4 as makeUUID } from "uuid"
+import EventBus from "./event-bus"
 import Templator from "../utils/templator"
-
-interface Block {
-    componentDidMount?(oldProps: Props): boolean
-    componentDidUpdate?(oldProps: Props, newProps: Props): boolean
-    render(): DocumentFragment
-}
 
 export interface Props {
     events?: Record<string, EventListener>
     attrs?: Record<string, string>
     [key: string]: unknown
+}
+
+interface Block {
+    componentDidMount?(oldProps: Props): boolean
+    componentDidUpdate?(oldProps: Props, newProps: Props): boolean
+    render(): DocumentFragment
 }
 
 interface Children { [key: string]: Block | Array<Block> }
@@ -25,17 +25,20 @@ const enum EVENTS {
 
 // Нельзя создавать экземпляр данного класса
 class Block {
-
     _element: HTMLElement
+
     _meta: {
         tagName: string
         props: Props
         children: Children
     }
+
     _id: string
 
     props: Props
+
     children: Children
+
     _eventBus: Function
 
     _setUpdate: boolean = false
@@ -74,10 +77,10 @@ class Block {
         const children: Children = {}
         const props: Props = {}
 
-        Object.entries(propsAndChildren).forEach(([key, value]) => {
+        Object.entries(propsAndChildren).forEach(([ key, value ]) => {
             if (
                 value instanceof Block
-                || (value instanceof Array && value.every(e => e instanceof Block))
+                || (value instanceof Array && value.every((e) => e instanceof Block))
             ) {
                 children[key] = value
             } else {
@@ -95,13 +98,15 @@ class Block {
     }
 
     _componentDidMount = () => {
-        this.componentDidMount && this.componentDidMount(this.props)
+        if (this.componentDidMount) {
+            this.componentDidMount(this.props)
+        }
 
-        Object.values(this.children).forEach(child => {
+        Object.values(this.children).forEach((child) => {
             if (child instanceof Block) {
                 child.dispatchComponentDidMount()
             } else {
-                child.forEach(item => {
+                child.forEach((item) => {
                     item.dispatchComponentDidMount()
                 })
             }
@@ -111,7 +116,7 @@ class Block {
     _addEvents() {
         const { events = {} } = this.props
 
-        Object.keys(events).forEach(eventName => {
+        Object.keys(events).forEach((eventName) => {
             this._element.addEventListener(eventName, events[eventName])
         })
     }
@@ -119,7 +124,7 @@ class Block {
     _addAttributes() {
         const { attrs = {} } = this.props
 
-        Object.keys(attrs).forEach(attr => {
+        Object.keys(attrs).forEach((attr) => {
             this._element.setAttribute(attr, attrs[attr])
         })
     }
@@ -127,7 +132,7 @@ class Block {
     _removeEvents() {
         const { events = {} } = this.props
 
-        Object.keys(events).forEach(eventName => {
+        Object.keys(events).forEach((eventName) => {
             this._element.removeEventListener(eventName, events[eventName])
         })
     }
@@ -137,8 +142,6 @@ class Block {
     }
 
     _componentDidUpdate(oldProps: Props, newProps: Props): void {
-        console.log(oldProps, newProps)
-        
         if (this.componentDidUpdate) {
             const response = this.componentDidUpdate(oldProps, newProps)
             if (!response) {
@@ -154,14 +157,13 @@ class Block {
             return
         }
 
-        const oldProps = {...this.props}
+        const oldProps = { ...this.props }
 
         Object.assign(this.props, nextProps)
 
-        const newProps = {...this.props }
+        const newProps = { ...this.props }
 
-        if (this._setUpdate)
-        {
+        if (this._setUpdate) {
             this._eventBus().emit(EVENTS.FLOW_CDU, oldProps, newProps)
         }
     }
@@ -195,11 +197,7 @@ class Block {
             },
 
             set: (target: Props | Children, prop: string, value: unknown): boolean => {
-                // console.log(`${prop}: `, value)
-                // console.log(target[prop], value, target[prop] !== value)
-
-                if (target[prop] !== value)
-                {
+                if (target[prop] !== value) {
                     target[prop] = value
                     this._setUpdate = true
                 }
@@ -224,37 +222,31 @@ class Block {
 
     compile(template: string, props: Props): DocumentFragment {
         const propsAndStubs = { ...props }
-        // console.log(this.children)
 
-        Object.entries(this.children).forEach(([key, child]) => {
+        Object.entries(this.children).forEach(([ key, child ]) => {
             if (child instanceof Block) {
                 propsAndStubs[key] = `<div data-id="${child._id}"></div>`
             } else {
                 propsAndStubs[key] = ""
-                child.forEach(item => propsAndStubs[key] += `<div data-id="${item._id}"></div>`)
+                child.forEach((item) => {
+                    propsAndStubs[key] += `<div data-id="${item._id}"></div>`
+                })
             }
         })
-
-        // console.log(propsAndStubs)
-
-        // return Templator.compile(template, propsAndStubs)
 
         const fragment = this._createDocumentElement("template") as HTMLTemplateElement
 
         fragment.innerHTML = Templator.compile(template, propsAndStubs)
-        
-        // console.log(fragment)
 
-        const content = fragment.content
-        
-        Object.values(this.children).forEach(child => {
+        const { content } = fragment
+
+        Object.values(this.children).forEach((child) => {
             if (child instanceof Block) {
                 const stub = content.querySelector(`[data-id="${child._id}"]`)
-                // console.log("stub:", stub, child.getContent())
-                
+
                 stub?.replaceWith(child.getContent())
             } else {
-                child.forEach(item => {
+                child.forEach((item) => {
                     const stub = content.querySelector(`[data-id="${item._id}"]`)
                     stub?.replaceWith(item.getContent())
                 })

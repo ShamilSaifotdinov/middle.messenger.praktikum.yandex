@@ -2,113 +2,78 @@ import Link from "../../components/link"
 import Input from "../../components/input"
 import Block from "../../modules/block"
 import tmp from "./tmp.hbs?raw"
-// import UserService from "../../services/user-service"
-// import Button from "../../components/button"
+import UserService from "../../services/user-service"
 import Form from "../../components/form"
-import { patterns } from "../../modules/global"
+import { fields } from "../../modules/global"
 
-// const userService = new UserService()
+const userService = new UserService()
+
+const localFields = [ "first_name", "second_name", "login", "email", "phone", "password" ]
 
 export default class Registry extends Block {
     constructor() {
-        const first_name = new Input({
-            labelText: "Имя",
-            name: "first_name",
-            required: true,
-        })
-
-        const second_name = new Input({
-            labelText: "Фамилия",
-            name: "second_name",
-            required: true,
-        })
-
-        const login = new Input({
-            labelText: "Логин",
-            name: "login",
-            pattern: patterns.login,
-            required: true,
-            onBlur: (value : string) => {
-                if (value.length == 0)
-                {
-                    // (this.props.form_inputs as Record<string, Block>)
-                    //  .login.setProps({ state: false })
-                    (this.props.form_inputs as Record<string, Block>).login.setProps({
-                        invalidMsg: "Обязательное значение"
-                    })
-                }
-                else if (!value.match(patterns.login))
-                {
-                    (this.props.form_inputs as Record<string, Block>).login.setProps({
-                        invalidMsg: "Длина логина не менее 3 символов"
-                    })
-                }
-                else
-                {
-                    (this.props.form_inputs as Record<string, Block>).login.setProps({
-                        invalidMsg: undefined
-                    })
-                }
+        const registryFields = localFields.reduce((obj, key) => {
+            const field = fields[key]
+            return {
+                ...obj,
+                [key]: new Input({
+                    labelText: field.label,
+                    name: key,
+                    pattern: field.regex,
+                    required: true,
+                    type: field.type,
+                    onBlur: (value : string) => {
+                        if (value.length === 0) {
+                            (this.props.form_inputs as Record<string, Block>)[key].setProps({
+                                invalidMsg: "Обязательное значение"
+                            })
+                        } else if (field.regex && !value.match(field.regex)) {
+                            (this.props.form_inputs as Record<string, Block>)[key].setProps({
+                                invalidMsg: field.desc
+                            })
+                        } else {
+                            (this.props.form_inputs as Record<string, Block>)[key].setProps({
+                                invalidMsg: undefined
+                            })
+                        }
+                    }
+                })
             }
-        })
+        }, {})
 
-        const email = new Input({
-            labelText: "E-mail",
-            name: "email",
-            type: "email",
-            required: true,
-        })
-
-        const phone = new Input({
-            labelText: "Телефон",
-            type: "tel",
-            name: "phone",
-            required: true,
-        })
-        
-        const password = new Input({
-            labelText: "Пароль",
-            name: "password",
-            type: "password",
-            pattern: patterns.password,
-            required: true,
-            onBlur: (value : string) => {
-                if (value.length == 0)
-                {
-                    (this.props.form_inputs as Record<string, Block>).password.setProps({
-                        invalidMsg: "Обязательное значение"
-                    })
-                }
-                else if (!value.match(patterns.password))
-                {
-                    (this.props.form_inputs as Record<string, Block>).password.setProps({
-                        invalidMsg: "Длина пароля не менее 8 символов"
-                    })
-                }
-                else
-                {
-                    (this.props.form_inputs as Record<string, Block>).password.setProps({
-                        invalidMsg: null
-                    })
-                }
-            }
-        })
-
-        const password_2 = new Input({
+        const passwordTry = new Input({
             labelText: "Повторите пароль",
-            name: "password_2",
+            name: "passwordTry",
             type: "password",
             required: true,
+            onBlur: (value : string) => {
+                const password = (this.props.form_inputs as Record<string, Block>)
+                    .password as Input
+                const passwordTryElem = (this.props.form_inputs as Record<string, Block>)
+                    .passwordTry
+
+                if (value !== password.value) {
+                    passwordTryElem.setProps({
+                        invalidMsg: "Пароли не совпадают",
+                        state: false
+                    })
+                } else {
+                    passwordTryElem.setProps({
+                        invalidMsg: undefined,
+                        state: undefined
+                    })
+                }
+            }
         })
 
         super("div", {
             attrs: {
                 class: "auth"
             },
-            form_inputs: { first_name, second_name, login, email, phone, password, password_2 },
+            form_inputs: { ...registryFields, passwordTry },
             form: new Form({
                 class: "auth_form",
-                inputs: [ first_name, second_name, login, email, phone, password, password_2 ],
+                inputs: [ ...Object.values(registryFields), passwordTry ],
                 submit_text: "Зарегистрироваться",
                 onSubmit: (data: Record<string, unknown>) => this.handleRegistry(data)
             }),
@@ -119,15 +84,8 @@ export default class Registry extends Block {
         })
     }
 
-    handleRegistry(e: Record<string, unknown>) {
-        console.log(e)
-        // e.preventDefault()
-
-        // const data = Object.fromEntries(
-        //     new FormData(this.element as HTMLFormElement).entries()
-        // ) as { login: string, password: string }
-
-        // userService.login(data)
+    handleRegistry(data: Record<string, unknown>) {
+        userService.registry(data)
     }
 
     render() {
