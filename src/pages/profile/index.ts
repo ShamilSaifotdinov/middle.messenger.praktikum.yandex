@@ -22,7 +22,8 @@ export default class ProfilePage extends Block {
                 title: fields[key].label,
                 value: props.profile[key],
                 ...(fields[key].type && { type: fields[key].type }),
-                pattern: fields[key].regex
+                pattern: fields[key].regex,
+                desc: fields[key].desc
             }))
 
         super("div", {

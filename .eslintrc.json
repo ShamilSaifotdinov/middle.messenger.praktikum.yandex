@@ -21,7 +21,6 @@
         "class-methods-use-this": 0,
         "no-underscore-dangle": "off",
         "object-curly-newline": "off",
-        "no-useless-escape": "off",
         "prefer-template": "off",
         "no-shadow": "off",
         "@typescript-eslint/no-shadow": "warn",

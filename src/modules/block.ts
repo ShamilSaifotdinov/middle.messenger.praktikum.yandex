@@ -23,7 +23,6 @@ const enum EVENTS {
     FLOW_RENDER = "flow:render"
 }
 
-// Нельзя создавать экземпляр данного класса
 class Block {
     _element: HTMLElement
 
@@ -216,7 +215,7 @@ class Block {
         if (this._id) {
             element.setAttribute("data-id", this._id)
         }
-        // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
+
         return element
     }
 

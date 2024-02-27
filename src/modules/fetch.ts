@@ -31,9 +31,11 @@ function queryStringify(data: Record<string, unknown>) {
     return result
 }
 
+type HTTPMethod = (url: string, options?: Options) => Promise<unknown>
+
 class HTTPTransport {
     // Read
-    get = (url: string, options: Options = {}): Promise<XMLHttpRequest> => {
+    get: HTTPMethod = (url, options = {}) => {
         if (options.data) {
             Object.assign(options, { data: queryStringify(options.data) })
         }
@@ -42,19 +44,19 @@ class HTTPTransport {
     }
 
     // Create
-    post = (url: string, options: Options = {}): Promise<XMLHttpRequest> => {
+    post: HTTPMethod = (url, options = {}) => {
         console.log({ url, options })
         return this.request(url, { ...options, method: METHODS.POST }, options.timeout)
     }
 
     // Update
-    put = (url: string, options: Options = {}): Promise<XMLHttpRequest> => {
+    put: HTTPMethod = (url, options = {}) => {
         console.log({ url, options })
         return this.request(url, { ...options, method: METHODS.PUT }, options.timeout)
     }
 
     // Delete
-    delete = (url: string, options: Options = {}): Promise<XMLHttpRequest> => {
+    delete: HTTPMethod = (url, options = {}) => {
         console.log({ url, options })
         return this.request(url, { ...options, method: METHODS.DELETE }, options.timeout)
     }
@@ -63,7 +65,7 @@ class HTTPTransport {
         url: string,
         options: OptionsRequest,
         timeout: number | null = 5000
-    ): Promise<XMLHttpRequest> => {
+    ): Promise<unknown> => {
         const { method, data, headers }: Options = options
 
         console.log({ url, method, data, headers, timeout })
@@ -95,11 +97,11 @@ class HTTPTransport {
 
 export const HTTP = new HTTPTransport()
 
-export function fetchWithRetry(url: string, options: Options): Promise<XMLHttpRequest> {
+export function fetchWithRetry(url: string, options: Options): Promise<unknown> {
     let { retries = 1 } = options
     console.log({ url, options, retries })
 
-    const retry = (err: Error): Promise<XMLHttpRequest> => {
+    const retry = (err: Error): Promise<unknown> => {
         retries -= 1
 
         if (retries === 0) {

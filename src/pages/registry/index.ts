@@ -20,7 +20,6 @@ export default class Registry extends Block {
                     labelText: field.label,
                     name: key,
                     pattern: field.regex,
-                    required: true,
                     type: field.type,
                     onBlur: (value : string) => {
                         if (value.length === 0) {
@@ -42,10 +41,9 @@ export default class Registry extends Block {
         }, {})
 
         const passwordTry = new Input({
-            labelText: "Повторите пароль",
+            labelText: fields.passwordTry.label,
             name: "passwordTry",
-            type: "password",
-            required: true,
+            type: fields.passwordTry.type,
             onBlur: (value : string) => {
                 const password = (this.props.form_inputs as Record<string, Block>)
                     .password as Input
@@ -54,7 +52,7 @@ export default class Registry extends Block {
 
                 if (value !== password.value) {
                     passwordTryElem.setProps({
-                        invalidMsg: "Пароли не совпадают",
+                        invalidMsg: fields.passwordTry.desc,
                         state: false
                     })
                 } else {
@@ -85,6 +83,22 @@ export default class Registry extends Block {
     }
 
     handleRegistry(data: Record<string, unknown>) {
+        let isInvalid = false
+        Object.keys(data).forEach((key) => {
+            const inputs = this.props.form_inputs as Record<string, Block>
+            if (typeof data[key] === "string" && (data[key] as string).length === 0) {
+                isInvalid = true
+                inputs[key].setProps({
+                    invalidMsg: "Обязательное значение",
+                    state: false
+                })
+            }
+        })
+
+        if (isInvalid) {
+            return
+        }
+
         userService.registry(data)
     }
 
