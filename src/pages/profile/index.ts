@@ -5,6 +5,7 @@ import Form from "../../components/form"
 import DetailsRow from "./details-row"
 import { fields } from "../../modules/global"
 import UserService from "../../services/user-service"
+import Link from "../../components/link"
 
 const userService = new UserService()
 
@@ -29,6 +30,10 @@ export default class ProfilePage extends Block {
         super("div", {
             ...props,
             attrs: { class: "profile" },
+            back: new Link({
+                href: "/chats",
+                class: "profile_back"
+            }),
             form: new Form({
                 class: "profile-details",
 

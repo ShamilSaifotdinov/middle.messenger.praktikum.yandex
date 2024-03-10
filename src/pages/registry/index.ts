@@ -75,9 +75,9 @@ export default class Registry extends Block {
                 submit_text: "Зарегистрироваться",
                 onSubmit: (data: Record<string, unknown>) => this.handleRegistry(data)
             }),
-            registry: new Link({
-                href: "./login.html",
-                title: "Войти"
+            login: new Link({
+                href: "/login",
+                content: "Войти"
             })
         })
     }

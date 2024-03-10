@@ -48,7 +48,7 @@ class Block {
      *
      * @returns {void}
      */
-    constructor(tagName:string = "div", propsAndChildren: Props = {}) {
+    constructor(tagName: string = "div", propsAndChildren: Props = {}) {
         const { children, props } = this._getChildren(propsAndChildren)
 
         const eventBus = new EventBus()
@@ -171,6 +171,10 @@ class Block {
         return this._element
     }
 
+    render(): DocumentFragment {
+        return this.compile("{{{ children }}}", this.props)
+    }
+
     _render(): void {
         const block = this.render()
 
@@ -256,7 +260,7 @@ class Block {
     }
 
     show(): void {
-        this.getContent().style.display = "block"
+        this.getContent().style.display = ""
     }
 
     hide(): void {

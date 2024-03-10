@@ -1,4 +1,5 @@
 import Block, { Props } from "../../modules/block"
+import Router from "../../modules/router"
 import "./link.css"
 
 interface PropsLink extends Props {
@@ -9,14 +10,21 @@ export default class Link extends Block {
     constructor(props: PropsLink) {
         super("a", {
             attrs: {
-                class: "link",
+                class: "link" + (props.class ? ` ${props.class}` : ""),
                 href: props.href || "#"
             },
-            title: props.title
+            content: props.content,
+            events: {
+                click: (event: Event) => {
+                    event.preventDefault()
+                    const router = Router.getInstance()
+                    router.go(props.href || "#")
+                }
+            }
         })
     }
 
     render() {
-        return this.compile("{{ title }}", this.props)
+        return this.compile("{{ content }}", this.props)
     }
 }

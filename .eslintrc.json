@@ -25,7 +25,9 @@
         "no-shadow": "off",
         "@typescript-eslint/no-shadow": "warn",
         "no-param-reassign": ["error", { "props": false }],
-        "no-redeclare": "off"
+        "no-redeclare": "off",
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": ["error"]
     },
     "parserOptions": {
         "sourceType": "module",

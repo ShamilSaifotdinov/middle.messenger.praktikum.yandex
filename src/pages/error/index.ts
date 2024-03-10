@@ -13,8 +13,8 @@ export default class ErrorPage extends Block {
                 class: "auth"
             },
             link: new Link({
-                title: "Перейти к чатам",
-                href: "./chats.html"
+                content: "Перейти к чатам",
+                href: "/chats"
             })
         })
     }

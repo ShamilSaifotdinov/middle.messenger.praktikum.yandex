@@ -1,14 +1,13 @@
-import render from "./utils/renderDOM"
 import Index from "./pages/index"
 import Login from "./pages/login"
 import Registry from "./pages/registry"
 import "./style.css"
-import Block from "./modules/block"
 import ErrorPage from "./pages/error"
-import Sidebar from "./components/sidebar"
+import Sidebar from "./layout/sidebar"
 import PageWindow from "./layout/window"
 import ProfilePage from "./pages/profile"
 import ChatPage from "./pages/chat"
+import Router from "./modules/router"
 
 const chats = [
     {
@@ -34,19 +33,18 @@ const chats = [
 ]
 
 const pageData = {
-    "/index.html": {
+    "/index": {
         title: "Страницы",
         pages: [] as { href: string; title: string; }[]
     },
-    "/login.html": {
+    "/login": {
         title: "Авторизация"
     },
-    "/registry.html": {
+    "/registry": {
         title: "Регистрация"
     },
-    "/chats.html": {
+    "/chats": {
         title: "Список чатов",
-        chats,
         active_chat: {
             name: "Петр",
             days: [
@@ -78,9 +76,8 @@ const pageData = {
             ]
         }
     },
-    "/profile.html": {
+    "/profile": {
         title: "Настройка профиля",
-        chats: chats.filter((chat) => !chat.active),
         profile: {
             first_name: "Иван",
             second_name: "Пупкин",
@@ -90,13 +87,13 @@ const pageData = {
             phone: "+79999999999"
         }
     },
-    "/404.html": {
+    "/404": {
         title: "Ошибка 404",
         code: "404",
         msg: "Упс... не туда",
         face: "¯\\_(ツ)_/¯"
     },
-    "/500.html": {
+    "/500": {
         title: "Ошибка 500",
         code: "500",
         msg: "Уже чиним",
@@ -105,36 +102,25 @@ const pageData = {
 }
 
 const pages = Object.entries(pageData)
-pageData["/index.html"].pages = pages.slice(1, pages.length)
+pageData["/index"].pages = pages.slice(1, pages.length)
     .map(([ key, value ]) => ({ href: key, title: value.title }))
 
-const route = (href: string, data: Record<string, unknown>, view: Block): void => {
-    document.title = (data[href === "*" ? "/index.html" : href] as Record<string, string>).title
-    render("#app", view)
-}
+const router = Router.getInstance()
 
-const sidebar = new Sidebar({})
+router.setRootQuery("#app")
 
-if (window.location.pathname === "/login.html") {
-    route("/login.html", pageData, new Login())
-} else if (window.location.pathname === "/registry.html") {
-    route("/registry.html", pageData, new Registry())
-} else if (window.location.pathname === "/chats.html") {
-    route("/chats.html", pageData, new PageWindow({
-        sidebar,
-        content: new ChatPage(pageData["/chats.html"])
-    }))
-    sidebar.setProps({ chats: pageData["/chats.html"].chats })
-} else if (window.location.pathname === "/profile.html") {
-    route("/profile.html", pageData, new PageWindow({
-        sidebar,
-        content: new ProfilePage(pageData["/profile.html"])
-    }))
-    sidebar.setProps({ chats: pageData["/profile.html"].chats })
-} else if (window.location.pathname === "/404.html") {
-    route("/404.html", pageData, new ErrorPage(pageData["/404.html"]))
-} else if (window.location.pathname === "/500.html") {
-    route("/500.html", pageData, new ErrorPage(pageData["/500.html"]))
-} else {
-    route("*", pageData, new Index({ pages: pageData["/index.html"].pages }))
-}
+router
+    .use("*", Index, { pages: pageData["/index"].pages })
+    .use("/login", Login)
+    .use("/registry", Registry)
+    .use("/chats", PageWindow, {
+        sidebar: new Sidebar({ raw_chats: chats }),
+        content: new ChatPage(pageData["/chats"])
+    })
+    .use("/profile", PageWindow, {
+        sidebar: new Sidebar({ raw_chats: chats.filter((chat) => !chat.active) }),
+        content: new ProfilePage(pageData["/profile"])
+    })
+    .use("/404", ErrorPage, pageData["/404"])
+    .use("/500", ErrorPage, pageData["/500"])
+    .start()

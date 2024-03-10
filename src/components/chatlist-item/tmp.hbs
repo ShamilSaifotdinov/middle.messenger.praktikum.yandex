@@ -1,0 +1,13 @@
+<a href="/{{ id }}" class="{{ linkClassName }}">
+    <div class="chatlist-item_avatar"></div>
+    <div class="chatlist-item_text">
+        <div class="chatlist-item_header">
+            <span class="chatlist-item_name"><b>{{ name }}</b></span>
+            <span class="chatlist-item_time">{{ time }}</span>
+        </div>
+        <div class="chatlist-item_content">
+            <span class="chatlist-item_msg">{{ msg }}</span>
+            {{#if count }}<div class="chatlist-item_msg-count">{{ count }}</div>{{/if }}
+        </div>
+    </div>
+</a>
