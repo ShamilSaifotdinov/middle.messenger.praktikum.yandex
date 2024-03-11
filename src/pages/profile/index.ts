@@ -31,7 +31,7 @@ export default class ProfilePage extends Block {
             ...props,
             attrs: { class: "profile" },
             back: new Link({
-                href: "/chats",
+                href: "/messenger",
                 class: "profile_back"
             }),
             form: new Form({

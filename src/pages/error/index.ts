@@ -14,7 +14,7 @@ export default class ErrorPage extends Block {
             },
             link: new Link({
                 content: "Перейти к чатам",
-                href: "/chats"
+                href: "/messenger"
             })
         })
     }

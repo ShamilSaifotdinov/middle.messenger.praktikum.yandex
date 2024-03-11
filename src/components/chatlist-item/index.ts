@@ -16,7 +16,7 @@ export default class ChatlistItem extends Block {
                 click: (event: Event) => {
                     event.preventDefault()
                     const router = Router.getInstance()
-                    router.go("/chats")
+                    router.go("/messenger")
                 }
             }
         })

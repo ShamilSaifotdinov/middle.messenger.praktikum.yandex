@@ -51,7 +51,7 @@ export default class Login extends Block {
                 onSubmit: (data: Record<string, unknown>) => this.handleLogin(data)
             }),
             registry: new Link({
-                href: "/registry",
+                href: "/sign-up",
                 content: "Регистрация"
             })
         })

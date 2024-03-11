@@ -76,7 +76,7 @@ export default class Registry extends Block {
                 onSubmit: (data: Record<string, unknown>) => this.handleRegistry(data)
             }),
             login: new Link({
-                href: "/login",
+                href: "/",
                 content: "Войти"
             })
         })

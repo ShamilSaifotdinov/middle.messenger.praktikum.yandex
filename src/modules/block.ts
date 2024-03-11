@@ -26,6 +26,8 @@ const enum EVENTS {
 class Block {
     _element: HTMLElement
 
+    _parentElement: ParentNode | null = null
+
     _meta: {
         tagName: string
         props: Props
@@ -260,11 +262,12 @@ class Block {
     }
 
     show(): void {
-        this.getContent().style.display = ""
+        this._parentElement?.appendChild(this.getContent())
     }
 
     hide(): void {
-        this.getContent().style.display = "none"
+        this._parentElement = this.getContent().parentNode
+        this.getContent().remove()
     }
 }
 

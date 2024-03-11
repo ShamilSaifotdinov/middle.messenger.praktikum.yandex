@@ -18,13 +18,13 @@ export default class Sidebar extends Block {
                 {
                     attrs: {
                         class: "sidebar-header_avatar",
-                        href: "./profile"
+                        href: "./settings"
                     },
                     events: {
                         click: (event: Event) => {
                             event.preventDefault()
                             const router = Router.getInstance()
-                            router.go("/profile")
+                            router.go("/settings")
                         }
                     }
                 }

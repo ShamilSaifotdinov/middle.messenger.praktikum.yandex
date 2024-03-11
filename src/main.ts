@@ -37,13 +37,13 @@ const pageData = {
         title: "Страницы",
         pages: [] as { href: string; title: string; }[]
     },
-    "/login": {
+    "/": {
         title: "Авторизация"
     },
-    "/registry": {
+    "/sign-up": {
         title: "Регистрация"
     },
-    "/chats": {
+    "/messenger": {
         title: "Список чатов",
         active_chat: {
             name: "Петр",
@@ -76,7 +76,7 @@ const pageData = {
             ]
         }
     },
-    "/profile": {
+    "/settings": {
         title: "Настройка профиля",
         profile: {
             first_name: "Иван",
@@ -111,15 +111,15 @@ router.setRootQuery("#app")
 
 router
     .use("*", Index, { pages: pageData["/index"].pages })
-    .use("/login", Login)
-    .use("/registry", Registry)
-    .use("/chats", PageWindow, {
+    .use("/", Login)
+    .use("/sign-up", Registry)
+    .use("/messenger", PageWindow, {
         sidebar: new Sidebar({ raw_chats: chats }),
-        content: new ChatPage(pageData["/chats"])
+        content: new ChatPage(pageData["/messenger"])
     })
-    .use("/profile", PageWindow, {
+    .use("/settings", PageWindow, {
         sidebar: new Sidebar({ raw_chats: chats.filter((chat) => !chat.active) }),
-        content: new ProfilePage(pageData["/profile"])
+        content: new ProfilePage(pageData["/settings"])
     })
     .use("/404", ErrorPage, pageData["/404"])
     .use("/500", ErrorPage, pageData["/500"])

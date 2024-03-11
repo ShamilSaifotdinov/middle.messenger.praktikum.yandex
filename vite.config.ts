@@ -10,18 +10,7 @@ export default defineConfig({
         }
     },
     build: {
-        outDir: resolve(__dirname, "dist"),
-        rollupOptions: {
-            input: {
-                index: resolve(__dirname, "src/index.html"),
-                login: resolve(__dirname, "src/login.html"),
-                registry: resolve(__dirname, "src/registry.html"),
-                chats: resolve(__dirname, "src/chats.html"),
-                profile: resolve(__dirname, "src/profile.html"),
-                404: resolve(__dirname, "src/404.html"),
-                500: resolve(__dirname, "src/500.html")
-            }
-        }
+        outDir: resolve(__dirname, "dist")
     },
     plugins: [
         checker({ typescript: true })
