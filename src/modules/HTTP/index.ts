@@ -1,3 +1,5 @@
+import queryStringify from "../../utils/queryString"
+
 const enum METHODS {
     GET = "GET",
     PUT = "PUT",
@@ -5,35 +7,30 @@ const enum METHODS {
     DELETE = "DELETE",
 }
 
-interface Options {
+export interface Options {
     method?: METHODS
     timeout?: number
     data?: Record<string, unknown>
     retries?: number
     [key: string]: unknown
+    withCredentials?: boolean
 }
 
 interface OptionsRequest extends Options {
     method: METHODS
 }
 
-function queryStringify(data: Record<string, unknown>) {
-    let result = ""
-
-    Object.keys(data).forEach((key) => {
-        if (result === "") {
-            result += `?${key}=${data[key]}`
-        } else {
-            result += `&${key}=${data[key]}`
-        }
-    })
-
-    return result
-}
-
 type HTTPMethod = (url: string, options?: Options) => Promise<unknown>
 
 class HTTPTransport {
+    api = "https://ya-praktikum.tech/api/v2"
+
+    baseURL: string
+
+    constructor(path: string) {
+        this.baseURL = this.api + path
+    }
+
     // Read
     get: HTTPMethod = (url, options = {}) => {
         if (options.data) {
@@ -68,19 +65,23 @@ class HTTPTransport {
     ): Promise<unknown> => {
         const { method, data, headers }: Options = options
 
+        const withCredentials: boolean = options.withCredentials || false
+
         console.log({ url, method, data, headers, timeout })
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest()
 
-            if (method === METHODS.GET) {
-                xhr.open(method, url + data)
+            if (method === METHODS.GET && data) {
+                xhr.open(method, this.baseURL + url + data)
             } else {
-                xhr.open(method, url)
+                xhr.open(method, this.baseURL + url)
             }
 
             xhr.onload = () => {
                 resolve(xhr)
             }
+
+            xhr.withCredentials = withCredentials
 
             xhr.onabort = reject
             xhr.onerror = reject
@@ -88,27 +89,14 @@ class HTTPTransport {
 
             if (method === METHODS.GET || !data) {
                 xhr.send()
+            } else if (data instanceof FormData) {
+                xhr.send(data)
             } else {
+                xhr.setRequestHeader("Content-Type", "application/json")
                 xhr.send(JSON.stringify(data))
             }
         })
     }
 }
 
-export const HTTP = new HTTPTransport()
-
-export function fetchWithRetry(url: string, options: Options): Promise<unknown> {
-    let { retries = 1 } = options
-    console.log({ url, options, retries })
-
-    const retry = (err: Error): Promise<unknown> => {
-        retries -= 1
-
-        if (retries === 0) {
-            throw err
-        } else {
-            return fetchWithRetry(url, { ...options, retries })
-        }
-    }
-    return new HTTPTransport().get(url, options).catch(retry)
-}
+export default HTTPTransport

@@ -62,3 +62,7 @@ export const fields: Record<string, {
         desc: "Не пустое значение"
     }
 }
+
+export type Indexed<T = unknown> = {
+    [key in string]: T;
+}
