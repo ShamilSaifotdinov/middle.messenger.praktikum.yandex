@@ -1,5 +1,7 @@
 import EventBus from "./event-bus.ts"
 
+export const defaultTitle = "Messenger"
+
 export const bus = new EventBus()
 
 export const fields: Record<string, {
@@ -61,8 +63,4 @@ export const fields: Record<string, {
         regex: "\\S",
         desc: "Не пустое значение"
     }
-}
-
-export type Indexed<T = unknown> = {
-    [key in string]: T;
 }

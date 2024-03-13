@@ -1,4 +1,4 @@
-import { Indexed } from "../modules/global"
+import { Indexed } from "../modules/types"
 
 function isObject(value: unknown): value is Indexed {
     return typeof value === "object"

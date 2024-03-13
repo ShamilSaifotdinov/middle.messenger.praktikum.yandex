@@ -1,5 +1,5 @@
 import merge from "./merge"
-import { Indexed } from "../modules/global"
+import { Indexed } from "../modules/types"
 
 function set(object: Indexed | unknown, path: string, value: unknown): Indexed | unknown {
     if (typeof object !== "object") {

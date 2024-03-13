@@ -51,17 +51,23 @@ export default class Input extends Block {
     }
 
     componentDidUpdate(oldProps: Props, newProps: Props) {
+        const input = this.children.input as Block
+        const attrs = { ...input._meta.props.attrs }
         if (oldProps.state !== newProps.state) {
-            const input = this.children.input as Block
-            const newAttrs = { ...input._meta.props.attrs }
-
             if (newProps.state === false) {
-                newAttrs["aria-invalid"] = "true"
+                attrs["aria-invalid"] = "true"
             } else {
-                newAttrs["aria-invalid"] = "false"
+                attrs["aria-invalid"] = "false"
             }
 
-            input.setProps({ attrs: newAttrs })
+            input.setProps({ attrs })
+        } else if (oldProps.value !== newProps.value) {
+            if (newProps.value) {
+                input.setProps({ attrs: { ...attrs, value: newProps.value as string } })
+            } else {
+                delete attrs.value
+                input.setProps({ attrs })
+            }
         }
 
         return true

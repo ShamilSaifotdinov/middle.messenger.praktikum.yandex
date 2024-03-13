@@ -20,7 +20,7 @@ interface OptionsRequest extends Options {
     method: METHODS
 }
 
-type HTTPMethod = (url: string, options?: Options) => Promise<unknown>
+type HTTPMethod = (url: string, options?: Options) => Promise<XMLHttpRequest>
 
 class HTTPTransport {
     api = "https://ya-praktikum.tech/api/v2"
@@ -62,7 +62,7 @@ class HTTPTransport {
         url: string,
         options: OptionsRequest,
         timeout: number | null = 5000
-    ): Promise<unknown> => {
+    ): Promise<XMLHttpRequest> => {
         const { method, data, headers }: Options = options
 
         const withCredentials: boolean = options.withCredentials || false

@@ -1,4 +1,4 @@
-import { Indexed } from "../modules/global"
+import { Indexed } from "../modules/types"
 import { isObjectOrArray } from "./types"
 
 function isEqual(

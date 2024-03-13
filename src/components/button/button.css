@@ -21,3 +21,10 @@
     background-color: $blue;
     border-color: $blue;
 }
+
+.button-outline-red
+{
+    background-color: $main;
+    color: $red;
+    border: 1px solid $red;
+}

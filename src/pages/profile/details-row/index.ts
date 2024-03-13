@@ -43,6 +43,15 @@ export default class DetailsRow extends Block {
         })
     }
 
+    componentDidUpdate(oldProps: PropsDetailsItem, newProps: PropsDetailsItem) {
+        if (oldProps.value !== newProps.value) {
+            (this.children.input as Input).setProps({ value: newProps.value })
+            return true
+        }
+
+        return false
+    }
+
     render() {
         return this.compile(tmp, this.props)
     }

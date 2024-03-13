@@ -1,4 +1,4 @@
-import { Indexed } from "../modules/global"
+import { Indexed } from "../modules/types"
 import { isObject, isObjectOrArray } from "./types"
 
 function getParams(obj: Indexed | unknown[], parentPath?: string): string[] {

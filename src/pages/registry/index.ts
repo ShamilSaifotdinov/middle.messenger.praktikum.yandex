@@ -2,11 +2,10 @@ import Link from "../../components/link"
 import Input from "../../components/input"
 import Block from "../../modules/block"
 import tmp from "./tmp.hbs?raw"
-import UserService from "../../services/user-service"
 import Form from "../../components/form"
-import { fields } from "../../modules/global"
-
-const userService = new UserService()
+import { bus, fields } from "../../modules/global"
+import UserRegistryController from "../../controllers/user-registry"
+import { RegistryFormModel } from "../../modules/types"
 
 const localFields = [ "first_name", "second_name", "login", "email", "phone", "password" ]
 
@@ -73,16 +72,34 @@ export default class Registry extends Block {
                 class: "auth_form",
                 inputs: [ ...Object.values(registryFields), passwordTry ],
                 submit_text: "Зарегистрироваться",
-                onSubmit: (data: Record<string, unknown>) => this.handleRegistry(data)
+                onSubmit: (data: RegistryFormModel) => this.handleRegistry(data)
             }),
             login: new Link({
                 href: "/",
                 content: "Войти"
             })
         })
+
+        bus.on("userIsExist", this.userIsExist.bind(this))
+        bus.on("reqErr", this.reqError.bind(this))
     }
 
-    handleRegistry(data: Record<string, unknown>) {
+    reqError(reason: string) {
+        const inputs = this.props.form_inputs as Record<string, Block>
+        inputs.passwordTry.setProps({ invalidMsg: reason })
+    }
+
+    userIsExist(field: string) {
+        const inputs = this.props.form_inputs as Record<string, Block>
+        const fieldLabel = {
+            login: "логином",
+            email: "Email"
+        }[field]
+
+        inputs[field].setProps({ invalidMsg: `Пользователь с таким ${fieldLabel} уже существует` })
+    }
+
+    handleRegistry(data: RegistryFormModel) {
         let isInvalid = false
         Object.keys(data).forEach((key) => {
             const inputs = this.props.form_inputs as Record<string, Block>
@@ -99,7 +116,7 @@ export default class Registry extends Block {
             return
         }
 
-        userService.registry(data)
+        UserRegistryController.registry(data)
     }
 
     render() {

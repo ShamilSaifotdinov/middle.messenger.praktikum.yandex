@@ -1,4 +1,4 @@
-import { Indexed } from "../modules/global"
+import { Indexed } from "../modules/types"
 
 function merge(lhs: Indexed, rhs: Indexed): Indexed {
     Object.keys(rhs).forEach((key: string) => {

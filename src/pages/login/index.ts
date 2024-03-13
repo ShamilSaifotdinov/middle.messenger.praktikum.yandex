@@ -2,11 +2,10 @@ import Link from "../../components/link"
 import Input from "../../components/input"
 import Block from "../../modules/block"
 import tmp from "./tmp.hbs?raw"
-import UserService from "../../services/user-service"
 import Form from "../../components/form"
-import { fields } from "../../modules/global"
-
-const userService = new UserService()
+import { bus, fields } from "../../modules/global"
+import UserLoginController from "../../controllers/user-login"
+import { LoginFormModel } from "../../modules/types"
 
 const localFields = [ "login", "password" ]
 
@@ -48,16 +47,25 @@ export default class Login extends Block {
                 class: "auth_form",
                 inputs: [ ...Object.values(inputs) ],
                 submit_text: "Войти",
-                onSubmit: (data: Record<string, unknown>) => this.handleLogin(data)
+                onSubmit: (data: LoginFormModel) => this.handleLogin(data)
             }),
             registry: new Link({
                 href: "/sign-up",
                 content: "Регистрация"
             })
         })
+
+        bus.on("badLogin", this.badLogin.bind(this))
     }
 
-    handleLogin(data: Record<string, unknown>) {
+    badLogin() {
+        const inputs = this.props.form_inputs as Record<string, Block>
+        inputs.password.setProps({
+            invalidMsg: "Неверный логин или пароль"
+        })
+    }
+
+    handleLogin(data: LoginFormModel) {
         let isInvalid = false
         Object.keys(data).forEach((key) => {
             const inputs = this.props.form_inputs as Record<string, Block>
@@ -74,15 +82,7 @@ export default class Login extends Block {
             return
         }
 
-        userService.login(data)
-
-        // const formInputs = this.props.form_inputs as Record<string, Block>
-
-        // formInputs.login.setProps({ state: false })
-        // formInputs.password.setProps({
-        //     state: false,
-        //     invalidMsg: "Неверный логин или пароль"
-        // })
+        UserLoginController.login(data)
     }
 
     render() {

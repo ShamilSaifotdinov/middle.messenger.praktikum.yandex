@@ -1,5 +1,5 @@
 import EventBus from "./event-bus"
-import { Indexed } from "./global"
+import { Indexed } from "./types"
 import set from "../utils/set"
 
 export enum StoreEvents {

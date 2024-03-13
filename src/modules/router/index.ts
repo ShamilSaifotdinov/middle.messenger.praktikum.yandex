@@ -1,16 +1,18 @@
-import { Props } from "./block"
-import Route, { blockClass } from "./route"
+import Route from "./route"
+import { AuthMode, BlockClass, RouteOptions, RouterOptions } from "./types"
 
 class Router {
-    private routes: Route[]
+    private routes: Route<BlockClass>[]
 
     private history: History
 
-    private _currentRoute: Route | null
+    private _currentRoute: Route<BlockClass> | null
 
     private _rootQuery?: string
 
     private static __instance: Router
+
+    _authrized = false
 
     private constructor() {
         this.routes = []
@@ -34,12 +36,16 @@ class Router {
         return Router.__instance
     }
 
-    use(pathname: string, block: blockClass, props?: Props) {
+    use<T extends BlockClass>(pathname: string, block: T, options?: RouterOptions<T>) {
         if (typeof this._rootQuery === "undefined") {
             throw new Error("rootQuery is required")
         }
 
-        const route = new Route(pathname, block, { rootQuery: this._rootQuery, ...props })
+        const route = new Route<T>(
+            pathname,
+            block,
+            { rootQuery: this._rootQuery, ...options } as RouteOptions<T>
+        )
 
         this.routes.push(route)
 
@@ -81,12 +87,24 @@ class Router {
         this.history.back()
     }
 
+    setAuthrized(state: boolean) {
+        this._authrized = state
+        this._onRoute(window.location.pathname)
+    }
+
     forward() {
         this.history.forward()
     }
 
     getRoute(pathname: string) {
-        return this.routes.find((route) => route.match(pathname))
+        return this.routes.find((route) => (
+            route.match(pathname)
+            && (
+                (route._options.authMode === AuthMode.onlyAuthrized && this._authrized)
+                || (route._options.authMode === AuthMode.onlyNotAuthrized && !this._authrized)
+                || !route._options.authMode
+            )
+        ))
     }
 }
 
