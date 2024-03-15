@@ -8,22 +8,22 @@ const chats = [
         name: "Петр",
         msg: "Привет! Как дела? Давно не виделись. Хотел бы встретиться завтра",
         time: "20:30",
-        count: 1,
+        count: 1
     },
     {
         name: "Петр",
         msg: "Привет! Как дела? Давно не виделись. Хотел бы встретиться завтра",
         time: "20:30",
-        active: true,
+        active: true
     },
     ...Array(14).fill(
         {
             name: "Петр",
             msg: "Привет! Как дела? Давно не виделись. Хотел бы встретиться завтра",
             time: "20:30",
-            count: 2,
-        },
-    ),
+            count: 2
+        }
+    )
 ]
 
 export default class ChatsController {
@@ -33,8 +33,8 @@ export default class ChatsController {
 
             console.log(data)
 
-            // store.set('chats', data)
-            store.set('chats', chats)
+            // store.set("chats", data)
+            store.set("chats", chats)
 
             // Останавливаем крутилку
         } catch (error) {

@@ -4,7 +4,7 @@ import Block from "../../modules/block"
 import tmp from "./tmp.hbs?raw"
 import Form from "../../components/form"
 import { bus, fields } from "../../modules/global"
-import UserLoginController from "../../controllers/user-login"
+import UserLoginController from "../../services/user-login"
 import { LoginFormModel } from "../../modules/types"
 
 const localFields = [ "login", "password" ]

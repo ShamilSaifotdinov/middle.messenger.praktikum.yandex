@@ -7,7 +7,7 @@ import { fields } from "../../modules/global"
 import UserService from "../../services/user-service"
 import Link from "../../components/link"
 import Button from "../../components/button"
-import UserLoginController from "../../controllers/user-login"
+import UserLoginController from "../../services/user-login"
 import isEqual from "../../utils/isEqual"
 
 const userService = new UserService()

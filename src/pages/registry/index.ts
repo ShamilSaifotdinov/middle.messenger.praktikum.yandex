@@ -4,7 +4,7 @@ import Block from "../../modules/block"
 import tmp from "./tmp.hbs?raw"
 import Form from "../../components/form"
 import { bus, fields } from "../../modules/global"
-import UserRegistryController from "../../controllers/user-registry"
+import UserRegistryController from "../../services/user-registry"
 import { RegistryFormModel } from "../../modules/types"
 
 const localFields = [ "first_name", "second_name", "login", "email", "phone", "password" ]
