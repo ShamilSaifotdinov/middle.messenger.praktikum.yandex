@@ -1,13 +1,13 @@
 export type Indexed<T = unknown> = {
-    [key in string]: T;
+    [key in string | symbol]: T;
 }
 
-export interface LoginFormModel extends Indexed {
+export interface LoginFormModel extends Indexed<string> {
     login: string;
     password: string;
 }
 
-export interface RegistryFormModel extends Indexed {
+export interface RegistryFormModel extends Indexed<string> {
     first_name: string
     second_name: string
     login: string
@@ -15,6 +15,15 @@ export interface RegistryFormModel extends Indexed {
     phone: string
     password: string
     passwordTry: string
+}
+
+export interface ProfileFormModel extends Indexed<string> {
+    first_name: string
+    second_name: string
+    display_name: string
+    login: string
+    email: string
+    phone: string
 }
 
 export type err = {

@@ -1,8 +1,9 @@
+import { ProfileFormModel } from "../../types"
 import BaseAPI from "../base-api"
 
 export default class UserAPI extends BaseAPI {
     constructor() {
-        super("/auth")
+        super("/user")
     }
 
     request() {
@@ -14,6 +15,10 @@ export default class UserAPI extends BaseAPI {
     //         // иначе контроллер проверит все сам дальше
     //         .then(({user: {info}}) => info)
     // }
+
+    updateProfile(profile: ProfileFormModel) {
+        return this.HTTP.put("/profile", { data: profile, withCredentials: true })
+    }
 
     updateAvatar(file: File) {
         const data = new FormData()

@@ -1,2 +1,9 @@
 <label class="profile-details_title">{{ title }}</label>
-{{{ input }}}
+{{#if isChangeable}}
+    {{{ input }}}
+{{/if}}
+{{#unless isChangeable}}
+    <span>
+        {{{ value }}}
+    </span>
+{{/unless}}

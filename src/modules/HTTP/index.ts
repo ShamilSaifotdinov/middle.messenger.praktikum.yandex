@@ -41,22 +41,19 @@ class HTTPTransport {
     }
 
     // Create
-    post: HTTPMethod = (url, options = {}) => {
-        console.log({ url, options })
-        return this.request(url, { ...options, method: METHODS.POST }, options.timeout)
-    }
+    post: HTTPMethod = (url, options = {}) => (
+        this.request(url, { ...options, method: METHODS.POST }, options.timeout)
+    )
 
     // Update
-    put: HTTPMethod = (url, options = {}) => {
-        console.log({ url, options })
-        return this.request(url, { ...options, method: METHODS.PUT }, options.timeout)
-    }
+    put: HTTPMethod = (url, options = {}) => (
+        this.request(url, { ...options, method: METHODS.PUT }, options.timeout)
+    )
 
     // Delete
-    delete: HTTPMethod = (url, options = {}) => {
-        console.log({ url, options })
-        return this.request(url, { ...options, method: METHODS.DELETE }, options.timeout)
-    }
+    delete: HTTPMethod = (url, options = {}) => (
+        this.request(url, { ...options, method: METHODS.DELETE }, options.timeout)
+    )
 
     request = (
         url: string,

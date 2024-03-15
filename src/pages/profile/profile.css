@@ -82,7 +82,15 @@
     width: 100%;
 }
 
-.profile-details_button
+.profile-details_submit
 {
     margin: calc(6rem - var(--profile-details-gap)) auto 0;
+}
+
+.profile-details_buttons
+{
+    margin: 6rem auto 0;
+    display: flex;
+    justify-content: center;
+    gap: 1.75rem;
 }

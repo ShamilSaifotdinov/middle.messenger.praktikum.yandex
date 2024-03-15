@@ -10,13 +10,18 @@ export interface PropsDetailsItem extends Props {
     type?: string
     pattern?: string
     desc?: string
+    isChangeable: boolean
 }
 
 export default class DetailsRow extends Block {
     constructor(props: PropsDetailsItem) {
         super("div", {
-            attrs: { class: "profile-details_item" },
+            isChangeable: props.isChangeable,
+            attrs: { class: "profile-details_item" + (props.isChangeable ? ""
+                : " profile-details_item-changeable"
+            ) },
             title: props.title,
+            value: props.value,
             input: new Input({
                 name: props.name,
                 value: props.value,

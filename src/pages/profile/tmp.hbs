@@ -5,6 +5,17 @@
 <section class="profile_container">
     <div class="profile_content">
         <div class="profile_avatar"></div>
-        {{{ form }}}
+        {{#if isChangeable}}
+            {{{ form }}}
+        {{/if}}
+        {{#unless isChangeable}}
+            <div class="profile-details">
+                {{{ details }}}
+            </div>
+            <div class="profile-details_buttons">
+                {{{ changeProfile }}}
+                {{{ changePassword }}}
+            </div>
+        {{/unless}}
     </div>
 </section>

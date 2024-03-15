@@ -9,7 +9,7 @@ export default function connect<T = Props>(
 ) {
     return class extends Component {
         constructor(props?: Indexed) {
-            const state = mapStateToProps(store.getState())
+            let state = mapStateToProps(store.getState())
 
             super({ ...props, ...state } as T)
 
@@ -18,6 +18,7 @@ export default function connect<T = Props>(
 
                 if (!isEqual(state, newState)) {
                     this.setProps({ ...newState })
+                    state = newState
                 }
             })
         }
