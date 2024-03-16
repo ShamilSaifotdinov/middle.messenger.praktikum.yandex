@@ -12,6 +12,8 @@ import { ProfileFormModel } from "../../modules/types"
 import ProfileService from "../../services/profile-service"
 import UpdatePassword from "./update-password"
 import Modal from "../../components/modal"
+import Avatar from "../../components/avatar"
+import UpdateAvatar from "./update-avatar"
 
 const localFields = [ "first_name", "second_name", "display_name", "login", "email", "phone" ]
 
@@ -26,9 +28,9 @@ export default class ProfilePage extends Block {
     constructor(props: PropsProfileDetails) {
         props.isChangeable = false
 
-        // const updateProfile = new UpdateProfile({
-        //     onClose: () => this.setProps({ updateProfileModal: null })
-        // })
+        const updateAvatar = new UpdateAvatar({
+            onClose: () => this.setProps({ updateAvatarModal: null })
+        })
 
         const updatePassword = new UpdatePassword({
             onClose: () => this.setProps({ updatePasswordModal: null })
@@ -65,6 +67,18 @@ export default class ProfilePage extends Block {
                 color: "outline-red",
                 onClick: () => {
                     UserLoginController.logout()
+                }
+            }),
+            avatar: new Avatar({
+                src: props.profile.avatar && (
+                    "https://ya-praktikum.tech/api/v2/resources" + props.profile.avatar
+                ),
+                class: "profile_avatar",
+                onClick: () => {
+                    this.setProps({ updateAvatarModal: new Modal({
+                        children: updateAvatar,
+                        onClose: () => this.setProps({ updateAvatarModal: null })
+                    }) })
                 }
             }),
             detailsChangeableRows,
@@ -109,6 +123,14 @@ export default class ProfilePage extends Block {
                         value: newProps.profile[key]
                     })
                 }
+            })
+        }
+
+        if (oldProps.profile.avatar !== newProps.profile.avatar) {
+            (this.children as Record<string, Block>).avatar.setProps({
+                src: newProps.profile.avatar && (
+                    "https://ya-praktikum.tech/api/v2/resources" + newProps.profile.avatar
+                )
             })
         }
 

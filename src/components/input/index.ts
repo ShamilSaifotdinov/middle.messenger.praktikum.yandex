@@ -11,6 +11,7 @@ interface PropsInput extends Props {
     required?: boolean
     state?: boolean
     onBlur?: Function,
+    onChange?: Function,
     class?: string
     value?: string
 }
@@ -19,19 +20,24 @@ export default class Input extends Block {
     value: string = ""
 
     constructor(props: PropsInput) {
+        const isFile = props.type === "file"
         const attrs: Record<string, string> = {
             name: props.name,
+            id: props.name,
             ...(props.pattern && { pattern: props.pattern }),
             ...(props.placeholder && { placeholder: props.placeholder }),
             ...(props.value && { value: props.value }),
             type: props.type || "text",
             ...(props.required && { required: "" }),
             ...((props.state === false) && { "aria-invalid": "true" }),
-            class: "input-form_input" + (props.class ? ` ${props.class}` : "")
+            class: "input-form_input" + (props.class ? ` ${props.class}` : ""),
+            ...props.attrs
         }
 
         super("div", {
             ...props,
+            isFile,
+            ...(isFile && { labelText: "Обзор" }),
             attrs: {
                 class: "input-form" + (props.field_class ? ` ${props.field_class}` : "")
             },
@@ -39,10 +45,15 @@ export default class Input extends Block {
                 attrs,
                 events: {
                     blur: (event: Event) => {
-                        this.value = (event.target as HTMLInputElement).value
-
                         if (props.onBlur) {
                             props.onBlur((event.target as HTMLInputElement).value)
+                        }
+                    },
+                    change: (event: Event) => {
+                        this.value = (event.target as HTMLInputElement).value
+
+                        if (props.onChange) {
+                            props.onChange(event)
                         }
                     }
                 }

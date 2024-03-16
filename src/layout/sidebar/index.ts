@@ -4,6 +4,9 @@ import tmp from "./tmp.hbs?raw"
 import Input from "../../components/input"
 import ChatlistItem from "../../components/chatlist-item"
 import Router from "../../modules/router"
+import Avatar from "../../components/avatar"
+
+const router = Router.getInstance()
 
 export default class Sidebar extends Block {
     constructor(props: Props) {
@@ -13,19 +16,10 @@ export default class Sidebar extends Block {
         super("div", {
             ...props,
             attrs: { class: "sidebar" },
-            profile: new Block(
-                "a",
+            profile: new Avatar(
                 {
-                    attrs: {
-                        class: "sidebar-header_avatar",
-                        href: "./settings"
-                    },
-                    events: {
-                        click: (event: Event) => {
-                            event.preventDefault()
-                            const router = Router.getInstance()
-                            router.go("/settings")
-                        }
+                    onClick: () => {
+                        router.go("/settings")
                     }
                 }
             ),

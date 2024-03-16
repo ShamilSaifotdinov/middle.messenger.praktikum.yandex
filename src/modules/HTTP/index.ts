@@ -7,20 +7,22 @@ const enum METHODS {
     DELETE = "DELETE",
 }
 
-export interface Options {
+export interface Options<T = Record<string, unknown>> {
     method?: METHODS
     timeout?: number
-    data?: Record<string, unknown>
+    data?: Record<string, unknown> | T
     retries?: number
     [key: string]: unknown
     withCredentials?: boolean
 }
 
-interface OptionsRequest extends Options {
+interface OptionsRequest extends Options<FormData> {
     method: METHODS
 }
 
-type HTTPMethod = (url: string, options?: Options) => Promise<XMLHttpRequest>
+type HTTPMethod<T = Record<string, unknown>> = (
+    url: string, options?: Options<T>
+) => Promise<XMLHttpRequest>
 
 class HTTPTransport {
     api = "https://ya-praktikum.tech/api/v2"
@@ -41,12 +43,12 @@ class HTTPTransport {
     }
 
     // Create
-    post: HTTPMethod = (url, options = {}) => (
+    post: HTTPMethod<FormData> = (url, options = {}) => (
         this.request(url, { ...options, method: METHODS.POST }, options.timeout)
     )
 
     // Update
-    put: HTTPMethod = (url, options = {}) => (
+    put: HTTPMethod<FormData> = (url, options = {}) => (
         this.request(url, { ...options, method: METHODS.PUT }, options.timeout)
     )
 
@@ -60,7 +62,7 @@ class HTTPTransport {
         options: OptionsRequest,
         timeout: number | null = 5000
     ): Promise<XMLHttpRequest> => {
-        const { method, data, headers }: Options = options
+        const { method, data, headers }: Options<FormData> = options
 
         const withCredentials: boolean = options.withCredentials || false
 

@@ -38,6 +38,10 @@ export interface UpdatePasswordFormModel extends UpdatePasswordModel {
     tryNewPassword: string
 }
 
+export interface AvatarFormModel extends Indexed {
+    avatar: File
+}
+
 export type err = {
     type: string
     desc: Indexed

@@ -1,0 +1,38 @@
+.update-avatar
+{
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.update-avatar .auth_title
+{
+    margin-bottom: 1.25rem;
+}
+
+.update-avatar .input-form
+{
+    width: max-content;
+    margin: 0 auto;
+}
+
+.update-avatar_submit {
+    display: none;
+}
+
+.new-avatar ~ .update-avatar_submit {
+    display: block;
+}
+
+.new-avatar
+{
+    height: 12.5rem !important;
+    width: 12.5rem !important;
+    margin: 0 auto;
+}
+
+.update-avatar_cancel
+{
+    margin-top: .75rem;
+}

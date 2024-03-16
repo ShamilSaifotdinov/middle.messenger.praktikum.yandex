@@ -11,6 +11,11 @@
     font-size: 0.833rem;
 }
 
+.input-form_label.button
+{
+    width: max-content;
+}
+
 .input-form_invalidMsg
 {
     font-size: .6875rem;

@@ -1,7 +1,9 @@
 import UserAPI from "../modules/HTTP/api/user-api"
 import { bus, fields } from "../modules/global"
 import store from "../modules/store"
-import { Indexed, ProfileFormModel, UpdatePasswordFormModel, err } from "../modules/types"
+import {
+    AvatarFormModel, Indexed, ProfileFormModel, UpdatePasswordFormModel, err
+} from "../modules/types"
 import validator from "../utils/validator"
 
 const userApi = new UserAPI()
@@ -36,6 +38,11 @@ const preparePasswords = (passwords: UpdatePasswordFormModel) => ({
     oldPassword: passwords.oldPassword,
     newPassword: passwords.newPassword
 })
+
+const avatarValidator = validator(
+    [ "avatar" ],
+    { avatar: { label: "Аватар" } }
+)
 
 export default class ProfileService {
     public static async updateProfile(profile: ProfileFormModel) {
@@ -96,6 +103,43 @@ export default class ProfileService {
 
                 if (customErr.desc.status === 400) {
                     bus.emit("user-updatePassword:badOldPassword")
+                }
+            }
+        }
+    }
+
+    public static async updateAvatar(data: AvatarFormModel) {
+        try {
+            console.log(data)
+            const validateData = avatarValidator(data)
+
+            if (!validateData.isCorrect) {
+                throw { type: "validationErr", desc: validateData }
+            }
+
+            const res = await userApi.updateAvatar(data.avatar)
+
+            console.log(res)
+
+            if (res.status !== 200) {
+                throw { type: "requestErr", desc: res }
+            }
+
+            const user = JSON.parse(res.response)
+
+            store.set("user", user)
+            bus.emit("user-updateAvatar:avatarChanged")
+        } catch (e) {
+            console.error(e)
+
+            if ((e as Indexed).type === "requestErr") {
+                const customErr = e as err
+
+                if (customErr.desc.response) {
+                    const res = JSON.parse(customErr.desc.response as string)
+                    if (res.reason) {
+                        bus.emit("user-updateAvatar:err", res.reason)
+                    }
                 }
             }
         }

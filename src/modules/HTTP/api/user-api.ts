@@ -6,9 +6,6 @@ export default class UserAPI extends BaseAPI {
         super("/user")
     }
 
-    request() {
-        // return this.HTTP.put("/profile/avatar", { data }).then((data) => {})
-    }
     // create() {
     //     return this.HTTP.post("/", {})
     //         // И то, только в случае, если уверены в результате,
@@ -27,6 +24,6 @@ export default class UserAPI extends BaseAPI {
     updateAvatar(file: File) {
         const data = new FormData()
         data.append("avatar", file)
-        // return this.HTTP.put("/profile/avatar", { data }).then((data) => {})
+        return this.HTTP.put("/profile/avatar", { data, withCredentials: true })
     }
 }

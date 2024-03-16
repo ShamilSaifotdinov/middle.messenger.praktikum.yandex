@@ -16,13 +16,6 @@
     border-bottom: 1px solid $deep_grey;
 }
 
-.sidebar-header_avatar
-{
-    height: 2.375rem;
-    width: 2.375rem;
-    background-image: url('@/avatar.svg');
-}
-
 .sidebar-header_search
 {
     flex: 1;
