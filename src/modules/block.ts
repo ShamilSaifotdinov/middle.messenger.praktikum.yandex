@@ -14,7 +14,7 @@ interface Block {
     render(): DocumentFragment
 }
 
-interface Children { [key: string]: Block | Array<Block> }
+interface Children { [key: string]: Block | Array<Block> | null }
 
 const enum EVENTS {
     INIT = "init",
@@ -82,6 +82,7 @@ class Block {
             if (
                 value instanceof Block
                 || (value instanceof Array && value.every((e) => e instanceof Block))
+                || (this.children && this.children[key] && value === null)
             ) {
                 children[key] = value
             } else {
@@ -106,7 +107,9 @@ class Block {
         Object.values(this.children).forEach((child) => {
             if (child instanceof Block) {
                 child.dispatchComponentDidMount()
-            } else {
+            }
+
+            if (child instanceof Array && child.every((e) => e instanceof Block)) {
                 child.forEach((item) => {
                     item.dispatchComponentDidMount()
                 })
@@ -153,20 +156,26 @@ class Block {
         this._eventBus().emit(EVENTS.FLOW_RENDER)
     }
 
-    setProps = (nextProps: Props): void => {
-        if (!nextProps) {
+    setProps = (nextPropsAndChildren: Props): void => {
+        if (!nextPropsAndChildren) {
             return
         }
 
+        const { children, props } = this._getChildren(nextPropsAndChildren)
+
+        Object.assign(this.children, children)
+
         const oldProps = { ...this.props }
 
-        Object.assign(this.props, nextProps)
+        Object.assign(this.props, props)
 
         const newProps = { ...this.props }
 
         if (this._setUpdate) {
             this._eventBus().emit(EVENTS.FLOW_CDU, oldProps, newProps)
         }
+
+        this._setUpdate = false
     }
 
     get element(): HTMLElement {
@@ -231,7 +240,9 @@ class Block {
         Object.entries(this.children).forEach(([ key, child ]) => {
             if (child instanceof Block) {
                 propsAndStubs[key] = `<div data-id="${child._id}"></div>`
-            } else {
+            }
+
+            if (child instanceof Array && child.every((e) => e instanceof Block)) {
                 propsAndStubs[key] = ""
                 child.forEach((item) => {
                     propsAndStubs[key] += `<div data-id="${item._id}"></div>`
@@ -250,7 +261,9 @@ class Block {
                 const stub = content.querySelector(`[data-id="${child._id}"]`)
 
                 stub?.replaceWith(child.getContent())
-            } else {
+            }
+
+            if (child instanceof Array && child.every((e) => e instanceof Block)) {
                 child.forEach((item) => {
                     const stub = content.querySelector(`[data-id="${item._id}"]`)
                     stub?.replaceWith(item.getContent())

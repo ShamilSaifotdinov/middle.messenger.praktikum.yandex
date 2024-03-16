@@ -1,7 +1,7 @@
 import AuthAPI from "../modules/HTTP/api/auth-api"
 import { bus, fields } from "../modules/global"
 import Router from "../modules/router"
-import { Indexed, RegistryFormModel, err } from "../modules/types"
+import { Indexed, RegistryFormModel, RegistryModel, err } from "../modules/types"
 // import Router from "../modules/router"
 import validator from "../utils/validator"
 
@@ -17,15 +17,23 @@ const userRegistryValidator = validator(
         "passwordTry"
     ],
     {
-        ...fields
-        // ,
-        // passwordTry: {
-        //     label: fields.passwordTry.label,
-        //     regex: `^${credential.password}$`,
-        //     ...(fields.passwordTry.desc && { desc: fields.passwordTry.desc })
-        // }
+        ...fields,
+        passwordTry: {
+            label: fields.passwordTry.label,
+            isEqual: "password",
+            desc: fields.passwordTry.desc as string
+        }
     }
 )
+
+const prepareUserRegistry = (user: RegistryFormModel): RegistryModel => ({
+    first_name: user.first_name,
+    second_name: user.second_name,
+    login: user.login,
+    email: user.email,
+    phone: user.phone,
+    password: user.password
+})
 
 const router = Router.getInstance()
 
@@ -38,7 +46,7 @@ export default class UserRegistryController {
                 throw { type: "validationErr", desc: validateData }
             }
 
-            const res = await authApi.create(data)
+            const res = await authApi.create(prepareUserRegistry(data))
 
             if (res.status !== 200) {
                 throw { type: "requestErr", desc: res }

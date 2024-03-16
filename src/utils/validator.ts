@@ -18,8 +18,15 @@ export default function validator(
                         value: obj[key]
                     }
                 } else if (
-                    typeof obj[key] === "string"
-                    && !(obj[key] as string).match(rules[key].regex)
+                    (
+                        typeof obj[key] === "string"
+                        && rules[key].regex
+                        && !(obj[key] as string).match(rules[key].regex)
+                    )
+                    || (
+                        rules[key].isEqual
+                        && obj[key] !== obj[rules[key].isEqual]
+                    )
                 ) {
                     throw {
                         desc: rules[key].desc,

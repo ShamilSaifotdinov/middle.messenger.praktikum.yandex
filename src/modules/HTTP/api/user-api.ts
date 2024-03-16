@@ -1,4 +1,4 @@
-import { ProfileFormModel } from "../../types"
+import { ProfileFormModel, UpdatePasswordModel } from "../../types"
 import BaseAPI from "../base-api"
 
 export default class UserAPI extends BaseAPI {
@@ -18,6 +18,10 @@ export default class UserAPI extends BaseAPI {
 
     updateProfile(profile: ProfileFormModel) {
         return this.HTTP.put("/profile", { data: profile, withCredentials: true })
+    }
+
+    updatePassword(passwords: UpdatePasswordModel) {
+        return this.HTTP.put("/password", { data: passwords, withCredentials: true })
     }
 
     updateAvatar(file: File) {

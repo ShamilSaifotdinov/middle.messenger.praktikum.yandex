@@ -1,4 +1,4 @@
-import { LoginFormModel, RegistryFormModel } from "../../types"
+import { LoginFormModel, RegistryModel } from "../../types"
 import BaseAPI from "../base-api"
 
 export default class AuthAPI extends BaseAPI {
@@ -24,7 +24,7 @@ export default class AuthAPI extends BaseAPI {
         // Обрабатываем получение данных из сервиса далее
     }
 
-    public create(user?: RegistryFormModel) {
+    public create(user?: RegistryModel) {
         if (!user) {
             throw new Error("RegistryAPI.create: need \"user\"")
         }

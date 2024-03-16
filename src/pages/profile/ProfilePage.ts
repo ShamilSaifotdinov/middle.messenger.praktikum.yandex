@@ -10,6 +10,8 @@ import UserLoginController from "../../services/user-login"
 import isEqual from "../../utils/isEqual"
 import { ProfileFormModel } from "../../modules/types"
 import ProfileService from "../../services/profile-service"
+import UpdatePassword from "./update-password"
+import Modal from "../../components/modal"
 
 const localFields = [ "first_name", "second_name", "display_name", "login", "email", "phone" ]
 
@@ -23,6 +25,14 @@ type DetailsRowsType = Record<string, DetailsRow>
 export default class ProfilePage extends Block {
     constructor(props: PropsProfileDetails) {
         props.isChangeable = false
+
+        // const updateProfile = new UpdateProfile({
+        //     onClose: () => this.setProps({ updateProfileModal: null })
+        // })
+
+        const updatePassword = new UpdatePassword({
+            onClose: () => this.setProps({ updatePasswordModal: null })
+        })
 
         const getDetailsRows = (isChangeable: boolean) => (localFields
             .reduce((obj, key) => ({
@@ -75,7 +85,12 @@ export default class ProfilePage extends Block {
             changePassword: new Button({
                 text: "Изменить пароль",
                 color: "outline-blue",
-                onClick: () => {}
+                onClick: () => {
+                    this.setProps({ updatePasswordModal: new Modal({
+                        children: updatePassword,
+                        onClose: () => this.setProps({ updatePasswordModal: null })
+                    }) })
+                }
             })
         })
 
@@ -83,10 +98,6 @@ export default class ProfilePage extends Block {
     }
 
     componentDidUpdate(oldProps: PropsProfileDetails, newProps: PropsProfileDetails) {
-        if (oldProps.isChangeable !== newProps.isChangeable) {
-            return true
-        }
-
         if (!isEqual(oldProps.profile, newProps.profile)) {
             localFields.forEach((key) => {
                 if (oldProps.profile[key] !== newProps.profile[key]) {
@@ -99,11 +110,9 @@ export default class ProfilePage extends Block {
                     })
                 }
             })
-
-            return true
         }
 
-        return false
+        return true
     }
 
     handleUpdateProfile(data: ProfileFormModel) {
