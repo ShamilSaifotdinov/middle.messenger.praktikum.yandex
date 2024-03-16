@@ -1,5 +1,5 @@
-import { ProfileFormModel, UpdatePasswordModel } from "../../types"
-import BaseAPI from "../base-api"
+import { ProfileFormModel, UpdatePasswordModel } from "../interfaces"
+import BaseAPI from "../utils/HTTP/base-api"
 
 export default class UserAPI extends BaseAPI {
     constructor() {

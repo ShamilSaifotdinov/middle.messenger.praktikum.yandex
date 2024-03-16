@@ -1,4 +1,4 @@
-import Block, { Props } from "../../modules/block"
+import Block, { Props } from "../../utils/block"
 import tmp from "./tmp.hbs?raw"
 import "./chat.css"
 import MsgForm from "./msg-form"

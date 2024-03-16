@@ -1,5 +1,5 @@
-import Input from "../../../components/input"
-import Block, { Props } from "../../../modules/block"
+import Input from "../../../components/field"
+import Block, { Props } from "../../../utils/block"
 import tmp from "./tmp.hbs?raw"
 import "./details-row.css"
 

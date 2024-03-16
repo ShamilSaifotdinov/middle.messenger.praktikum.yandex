@@ -1,7 +1,7 @@
-import AuthAPI from "../modules/HTTP/api/auth-api"
-import { bus, fields } from "../modules/global"
-import Router from "../modules/router"
-import { Indexed, RegistryFormModel, RegistryModel, err } from "../modules/types"
+import AuthAPI from "../api/auth-api"
+import { bus, fields } from "../global"
+import Router from "../utils/router"
+import { Indexed, RegistryFormModel, RegistryModel, err } from "../interfaces"
 // import Router from "../modules/router"
 import validator from "../utils/validator"
 

@@ -1,4 +1,4 @@
-import Block from "../../modules/block"
+import Block from "../../utils/block"
 import "./avatar.css"
 import template from "./tmp.hbs?raw"
 import avatarUrl from "./avatar.svg"

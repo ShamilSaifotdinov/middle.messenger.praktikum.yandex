@@ -1,9 +1,9 @@
-import UserAPI from "../modules/HTTP/api/user-api"
-import { bus, fields } from "../modules/global"
-import store from "../modules/store"
+import UserAPI from "../api/user-api"
+import { bus, fields } from "../global"
+import store from "../store"
 import {
     AvatarFormModel, Indexed, ProfileFormModel, UpdatePasswordFormModel, err
-} from "../modules/types"
+} from "../interfaces"
 import validator from "../utils/validator"
 
 const userApi = new UserAPI()

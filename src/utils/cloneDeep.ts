@@ -1,4 +1,4 @@
-import { Indexed } from "../modules/types"
+import { Indexed } from "../interfaces"
 
 type Return<T> = T extends Date ? Date :
     T extends Set<unknown> ? Set<unknown> :

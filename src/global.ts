@@ -1,4 +1,4 @@
-import EventBus from "./event-bus.ts"
+import EventBus from "./utils/event-bus.ts"
 
 export const defaultTitle = "Messenger"
 

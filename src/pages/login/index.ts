@@ -1,11 +1,11 @@
 import Link from "../../components/link"
-import Input from "../../components/input"
-import Block from "../../modules/block"
+import Input from "../../components/field"
+import Block from "../../utils/block"
 import tmp from "./tmp.hbs?raw"
 import Form from "../../components/form"
-import { bus, fields } from "../../modules/global"
+import { bus, fields } from "../../global"
 import UserLoginController from "../../services/user-login"
-import { LoginFormModel } from "../../modules/types"
+import { LoginFormModel } from "../../interfaces"
 
 const localFields = [ "login", "password" ]
 

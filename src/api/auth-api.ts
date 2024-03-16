@@ -1,5 +1,5 @@
-import { LoginFormModel, RegistryModel } from "../../types"
-import BaseAPI from "../base-api"
+import { LoginFormModel, RegistryModel } from "../interfaces"
+import BaseAPI from "../utils/HTTP/base-api"
 
 export default class AuthAPI extends BaseAPI {
     constructor() {

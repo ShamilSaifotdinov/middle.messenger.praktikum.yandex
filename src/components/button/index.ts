@@ -1,4 +1,4 @@
-import Block, { Props } from "../../modules/block.ts"
+import Block, { Props } from "../../utils/block.ts"
 import "./button.css"
 
 interface PropsButton extends Props {

@@ -1,5 +1,5 @@
-import { fields } from "../modules/global"
-import { Indexed } from "../modules/types"
+import { fields } from "../global"
+import { Indexed } from "../interfaces"
 
 export default function validator(
     keys: string[],

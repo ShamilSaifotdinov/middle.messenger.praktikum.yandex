@@ -1,5 +1,5 @@
-import Block, { Props } from "../../modules/block"
-import Router from "../../modules/router"
+import Block, { Props } from "../../utils/block"
+import Router from "../../utils/router"
 import "./link.css"
 
 interface PropsLink extends Props {

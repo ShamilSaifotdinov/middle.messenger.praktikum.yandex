@@ -1,4 +1,4 @@
-import BaseAPI from "../base-api"
+import BaseAPI from "../utils/HTTP/base-api"
 
 export default class ChatAPI extends BaseAPI {
     constructor() {

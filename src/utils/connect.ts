@@ -1,6 +1,6 @@
-import Block, { Props } from "../modules/block"
-import { Indexed } from "../modules/types"
-import store, { StoreEvents } from "../modules/store"
+import Block, { Props } from "./block"
+import { Indexed } from "../interfaces"
+import store, { StoreEvents } from "../store"
 import isEqual from "./isEqual"
 
 export default function connect<T = Props>(

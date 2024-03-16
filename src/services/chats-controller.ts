@@ -1,5 +1,5 @@
-import ChatAPI from "../modules/HTTP/api/chats-api"
-import store from "../modules/store"
+import ChatAPI from "../api/chats-api"
+import store from "../store"
 
 const chatAPI = new ChatAPI()
 

@@ -1,5 +1,5 @@
 import Link from "../../components/link"
-import Block, { Props } from "../../modules/block"
+import Block, { Props } from "../../utils/block"
 import tmp from "./tmp.hbs?raw"
 
 export default class Index extends Block {

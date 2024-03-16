@@ -1,7 +1,7 @@
 import "./chatlist-item.css"
-import Block, { Props } from "../../modules/block"
+import Block, { Props } from "../../../utils/block"
 import tmp from "./tmp.hbs?raw"
-import Router from "../../modules/router"
+import Router from "../../../utils/router"
 
 export default class ChatlistItem extends Block {
     constructor(props: Props) {

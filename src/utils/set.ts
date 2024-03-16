@@ -1,5 +1,5 @@
 import merge from "./merge"
-import { Indexed } from "../modules/types"
+import { Indexed } from "../interfaces"
 
 function set(object: Indexed | unknown, path: string, value: unknown): Indexed | unknown {
     if (typeof object !== "object") {

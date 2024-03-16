@@ -1,7 +1,7 @@
 // import { bus } from "../modules/global"
 // import { HTTP } from "../modules/fetch"
 
-import { fields } from "../modules/global"
+import { fields } from "../global"
 
 function getInvalidFields(
     obj: Record<string, unknown>,

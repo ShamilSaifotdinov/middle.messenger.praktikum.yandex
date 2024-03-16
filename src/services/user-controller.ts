@@ -1,6 +1,6 @@
-import AuthAPI from "../modules/HTTP/api/auth-api"
-import store from "../modules/store"
-import { Indexed, err } from "../modules/types"
+import AuthAPI from "../api/auth-api"
+import store from "../store"
+import { Indexed, err } from "../interfaces"
 
 const authApi = new AuthAPI()
 

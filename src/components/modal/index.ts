@@ -1,4 +1,4 @@
-import Block from "../../modules/block"
+import Block from "../../utils/block"
 import template from "./tmp.hbs?raw"
 import "./modal.css"
 

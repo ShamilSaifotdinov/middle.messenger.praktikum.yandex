@@ -1,4 +1,4 @@
-import { Indexed } from "../../modules/types"
+import { Indexed } from "../../interfaces"
 import connect from "../../utils/connect"
 import ProfilePage from "./ProfilePage"
 

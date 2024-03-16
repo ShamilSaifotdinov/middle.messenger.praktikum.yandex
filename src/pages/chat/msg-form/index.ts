@@ -1,4 +1,4 @@
-import Block from "../../../modules/block"
+import Block from "../../../utils/block"
 import tmp from "./tmp.hbs?raw"
 import "./msg-form.css"
 import BaseInput from "../../../components/baseInput"

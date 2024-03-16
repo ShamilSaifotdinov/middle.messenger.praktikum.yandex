@@ -1,4 +1,4 @@
-import Block, { Props } from "../../modules/block"
+import Block, { Props } from "../../utils/block"
 import BaseInput from "../baseInput/index"
 import tmp from "./tmp.hbs?raw"
 import "./input.css"
@@ -34,7 +34,7 @@ export default class Input extends Block {
             ...props.attrs
         }
 
-        super("div", {
+        super("field", {
             ...props,
             isFile,
             ...(isFile && { labelText: "Обзор" }),

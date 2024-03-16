@@ -1,9 +1,9 @@
 import "./sidebar.css"
-import Block, { Props } from "../../modules/block"
+import Block, { Props } from "../../utils/block"
 import tmp from "./tmp.hbs?raw"
-import Input from "../../components/input"
-import ChatlistItem from "../../components/chatlist-item"
-import Router from "../../modules/router"
+import Input from "../../components/field"
+import ChatlistItem from "./chatlist-item"
+import Router from "../../utils/router"
 import Avatar from "../../components/avatar"
 
 const router = Router.getInstance()

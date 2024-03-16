@@ -1,6 +1,6 @@
 import { v4 as makeUUID } from "uuid"
 import EventBus from "./event-bus"
-import Templator from "../utils/templator"
+import Templator from "./templator"
 
 export interface Props {
     events?: Record<string, EventListener>

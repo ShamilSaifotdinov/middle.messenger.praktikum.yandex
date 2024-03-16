@@ -1,4 +1,4 @@
-import Block, { Props } from "../../modules/block"
+import Block, { Props } from "../../utils/block"
 import tmp from "./tmp.hbs?raw"
 import Button from "../../components/button"
 
