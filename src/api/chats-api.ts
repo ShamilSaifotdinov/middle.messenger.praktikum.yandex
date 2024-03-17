@@ -5,14 +5,18 @@ export default class ChatAPI extends BaseAPI {
         super("/chats")
     }
 
-    // create(data) {
-    //     return this.HTTP.post("/", { data })
-    // }
+    create(title?: string) {
+        return this.HTTP.post("/", { data: { title }, withCredentials: true })
+    }
 
-    // request(data) {
-    //     return this.HTTP.get("/", { data, withCredentials: true })
-    //         .then(({ response }) => JSON.parse(response))
-    // }
+    addUsers(data: { chatId: number, users: number[] }) {
+        return this.HTTP.put("/users", { data, withCredentials: true })
+    }
+
+    request() {
+        return this.HTTP.get("/", { withCredentials: true })
+        // .then(({ response }) => JSON.parse(response))
+    }
 
     // delete(data) {
     //     return this.HTTP.delete("/", { data, withCredentials: true })

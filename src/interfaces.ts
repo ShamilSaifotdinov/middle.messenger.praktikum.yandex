@@ -42,6 +42,20 @@ export interface AvatarFormModel extends Indexed {
     avatar: File
 }
 
+export interface NewChat extends Indexed {
+    title: string
+    users: number[]
+}
+
+export interface User extends Indexed {
+    id: number
+    first_name: string
+    second_name: string
+    display_name: string
+    login: string
+    avatar: string
+}
+
 export type err = {
     type: string
     desc: Indexed

@@ -27,7 +27,6 @@ export default class UpdateAvatar extends Block {
         })
 
         super("div", {
-            ...props,
             attrs: {
                 class: "update-avatar"
             },

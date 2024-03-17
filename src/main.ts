@@ -1,4 +1,3 @@
-// import Index from "./pages/index"
 import Login from "./pages/login"
 import Registry from "./pages/registry"
 import "./style.css"
@@ -13,40 +12,7 @@ import store, { StoreEvents } from "./store"
 import { bus } from "./global"
 import { AuthMode } from "./utils/router/types"
 
-const chats = [
-    {
-        name: "Петр",
-        msg: "Привет! Как дела? Давно не виделись. Хотел бы встретиться завтра",
-        time: "20:30",
-        count: 1
-    },
-    {
-        name: "Петр",
-        msg: "Привет! Как дела? Давно не виделись. Хотел бы встретиться завтра",
-        time: "20:30",
-        active: true
-    },
-    ...Array(14).fill(
-        {
-            name: "Петр",
-            msg: "Привет! Как дела? Давно не виделись. Хотел бы встретиться завтра",
-            time: "20:30",
-            count: 2
-        }
-    )
-]
-
 const pageData = {
-    "/index": {
-        title: "Страницы",
-        pages: [] as { href: string; title: string; }[]
-    },
-    // "/": {
-    //     title: "Авторизация"
-    // },
-    // "/sign-up": {
-    //     title: "Регистрация"
-    // },
     "/messenger": {
         title: "Список чатов",
         active_chat: {
@@ -80,17 +46,6 @@ const pageData = {
             ]
         }
     },
-    // "/settings": {
-    //     title: "Настройка профиля",
-    //     profile: {
-    //         first_name: "Иван",
-    //         second_name: "Пупкин",
-    //         display_name: "Иван",
-    //         login: "Ivan_pupkin",
-    //         email: "Ivan_pupkin@yandex.ru",
-    //         phone: "+79999999999"
-    //     }
-    // },
     "/404": {
         // title: "Ошибка 404",
         code: "404",
@@ -105,10 +60,6 @@ const pageData = {
     }
 }
 
-// const pages = Object.entries(pageData)
-// pageData["/index"].pages = pages.slice(1, pages.length)
-//     .map(([ key, value ]) => ({ href: key, title: value.title }))
-
 const router = Router.getInstance()
 
 router.setRootQuery("#app")
@@ -116,10 +67,7 @@ router.setRootQuery("#app")
 bus.on("getUser", () => UserController.getUser())
 
 UserController.getUser().then(() => {
-    // const sidebar = new Sidebar({})
-
     router
-        // .use("*", Index, { props: { pages: pageData["/index"].pages, title: "Страницы" } })
         .use("*", Login, { authMode: AuthMode.onlyNotAuthrized, title: "Авторизация" })
         .use("*", ErrorPage, { props: pageData["/404"], title: "Ошибка 404" })
         .use("/sign-up", Registry, { authMode: AuthMode.onlyNotAuthrized, title: "Регистрация" })
@@ -127,8 +75,7 @@ UserController.getUser().then(() => {
             authMode: AuthMode.onlyAuthrized,
             title: "Список чатов",
             props: {
-                sidebar: new Sidebar({ raw_chats: chats }),
-                // sidebar,
+                sidebar: new Sidebar(),
                 content: new ChatPage(pageData["/messenger"])
             }
         })
@@ -136,8 +83,7 @@ UserController.getUser().then(() => {
             authMode: AuthMode.onlyAuthrized,
             title: "Настройка профиля",
             props: {
-                sidebar: new Sidebar({ raw_chats: chats.filter((chat) => !chat.active) }),
-                // sidebar,
+                sidebar: new Sidebar(),
                 content: new ProfilePage()
             }
         })

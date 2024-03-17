@@ -3,8 +3,6 @@ import Block, { Props } from "../../utils/block"
 import tmp from "./tmp.hbs?raw"
 import "./error.css"
 
-// const userService = new UserService()
-
 export default class ErrorPage extends Block {
     constructor(props: Props) {
         super("div", {

@@ -12,6 +12,7 @@ interface PropsInput extends Props {
     state?: boolean
     onBlur?: Function,
     onChange?: Function,
+    onInput?: Function,
     class?: string
     value?: string
 }
@@ -50,10 +51,15 @@ export default class Input extends Block {
                         }
                     },
                     change: (event: Event) => {
-                        this.value = (event.target as HTMLInputElement).value
-
                         if (props.onChange) {
                             props.onChange(event)
+                        }
+                    },
+                    input: (event: Event) => {
+                        this.value = (event.target as HTMLInputElement).value
+
+                        if (props.onInput) {
+                            props.onInput(event)
                         }
                     }
                 }

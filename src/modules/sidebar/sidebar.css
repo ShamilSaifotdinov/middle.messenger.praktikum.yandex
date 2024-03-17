@@ -23,15 +23,16 @@
 
 .sidebar-header_search-input
 {
-    background: url('@/search.svg') no-repeat;
+    background: url("@/search.svg") no-repeat;
     background-position: center right 7px;
 }
 
-.sidebar-header_new-chat
+.sidebar-header_create-chat
 {
     mask-image: url('@/plus.svg');
     background-color: $deep_grey;
     border: none;
+    padding: 0;
     width: 1.5rem;
     height: 1.5rem;
 }

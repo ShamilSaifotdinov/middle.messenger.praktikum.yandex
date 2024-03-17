@@ -1,7 +1,7 @@
-import EventBus from "./utils/event-bus"
-import { Indexed } from "./interfaces"
-import set from "./utils/set"
-import cloneDeep from "./utils/cloneDeep"
+import EventBus from "../utils/event-bus"
+import { Indexed } from "../interfaces"
+import set from "../utils/set"
+import cloneDeep from "../utils/cloneDeep"
 
 export enum StoreEvents {
     Updated = "updated",

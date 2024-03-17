@@ -2,9 +2,9 @@ import Block from "../../../utils/block"
 import tmp from "./tmp.hbs?raw"
 import "./msg-form.css"
 import BaseInput from "../../../components/baseInput"
-import UserService from "../../../services/user-service"
+import UserServiceOld from "../../../services/user-service_old"
 
-const userService = new UserService()
+const userService = new UserServiceOld()
 
 export default class MsgForm extends Block {
     constructor() {

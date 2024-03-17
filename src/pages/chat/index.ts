@@ -1,18 +1,11 @@
-import Block, { Props } from "../../utils/block"
-import tmp from "./tmp.hbs?raw"
-import "./chat.css"
-import MsgForm from "./msg-form"
+import { Indexed } from "../../interfaces"
+import connect from "../../utils/connect"
+import ChatPage from "./ChatPage"
 
-export default class ChatPage extends Block {
-    constructor(props: Props) {
-        super("div", {
-            ...props,
-            attrs: { class: "chat" },
-            msgForm: new MsgForm()
-        })
-    }
-
-    render() {
-        return this.compile(tmp, this.props)
+function mapChatToProps(state: Indexed) {
+    return {
+        active_chat: state.active_chat || undefined
     }
 }
+
+export default connect(ChatPage, mapChatToProps)

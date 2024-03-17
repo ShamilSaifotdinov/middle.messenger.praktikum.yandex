@@ -26,4 +26,8 @@ export default class UserAPI extends BaseAPI {
         data.append("avatar", file)
         return this.HTTP.put("/profile/avatar", { data, withCredentials: true })
     }
+
+    searchUser(login: string) {
+        return this.HTTP.post("/search", { data: { login }, withCredentials: true })
+    }
 }
