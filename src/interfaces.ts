@@ -56,6 +56,12 @@ export interface User extends Indexed {
     avatar: string
 }
 
+export interface UpdateChatModel {
+    avatar?: File
+    add?: number[]
+    delete?: number[]
+}
+
 export type err = {
     type: string
     desc: Indexed

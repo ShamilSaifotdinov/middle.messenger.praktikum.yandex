@@ -1,6 +1,6 @@
 import BaseAPI from "../utils/HTTP/base-api"
 
-export default class ChatAPI extends BaseAPI {
+export default class ChatsAPI extends BaseAPI {
     constructor() {
         super("/chats")
     }

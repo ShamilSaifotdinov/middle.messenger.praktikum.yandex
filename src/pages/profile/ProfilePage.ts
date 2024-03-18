@@ -28,14 +28,6 @@ export default class ProfilePage extends Block {
     constructor(props: PropsProfileDetails) {
         props.isChangeable = false
 
-        const updateAvatar = new UpdateAvatar({
-            onClose: () => this.setProps({ updateAvatarModal: null })
-        })
-
-        const updatePassword = new UpdatePassword({
-            onClose: () => this.setProps({ updatePasswordModal: null })
-        })
-
         const getDetailsRows = (isChangeable: boolean) => (localFields
             .reduce((obj, key) => ({
                 ...obj,
@@ -76,8 +68,9 @@ export default class ProfilePage extends Block {
                 class: "profile_avatar",
                 onClick: () => {
                     this.setProps({ updateAvatarModal: new Modal({
-                        children: updateAvatar,
-                        onClose: () => this.setProps({ updateAvatarModal: null })
+                        children: new UpdateAvatar({
+                            onClose: () => this.setProps({ updateAvatarModal: null })
+                        })
                     }) })
                 }
             }),
@@ -101,8 +94,9 @@ export default class ProfilePage extends Block {
                 color: "outline-blue",
                 onClick: () => {
                     this.setProps({ updatePasswordModal: new Modal({
-                        children: updatePassword,
-                        onClose: () => this.setProps({ updatePasswordModal: null })
+                        children: new UpdatePassword({
+                            onClose: () => this.setProps({ updatePasswordModal: null })
+                        })
                     }) })
                 }
             })

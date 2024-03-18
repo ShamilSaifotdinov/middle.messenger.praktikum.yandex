@@ -71,7 +71,7 @@ class HTTPTransport {
             const xhr = new XMLHttpRequest()
 
             if (method === METHODS.GET && data) {
-                xhr.open(method, this.baseURL + url + data)
+                xhr.open(method, this.baseURL + url + "?" + data)
             } else {
                 xhr.open(method, this.baseURL + url)
             }

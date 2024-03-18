@@ -3,7 +3,7 @@ import template from "./tmp.hbs?raw"
 import "./modal.css"
 
 export default class Modal extends Block {
-    constructor(props : Record<string, unknown> = {}) {
+    constructor(props : { children: Block }) {
         super("div", {
             ...props,
             attrs: {

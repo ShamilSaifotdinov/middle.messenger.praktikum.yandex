@@ -16,10 +16,6 @@ const router = Router.getInstance()
 
 export default class Sidebar extends Block {
     constructor(props: Props) {
-        const createChat = new CreateChat({
-            onClose: () => this.setProps({ createChatModal: null })
-        })
-
         props.chats = (props.raw_chats as Array<Record<string, unknown>>)
             .map((chat) => new ChatlistItem(chat))
 
@@ -45,8 +41,9 @@ export default class Sidebar extends Block {
                 class: "sidebar-header_create-chat",
                 onClick: () => {
                     this.setProps({ createChatModal: new Modal({
-                        children: createChat,
-                        onClose: () => this.setProps({ updateAvatarModal: null })
+                        children: new CreateChat({
+                            onClose: () => this.setProps({ createChatModal: null })
+                        })
                     }) })
                 }
             })

@@ -1,5 +1,6 @@
 import store from "."
 import { Indexed } from "../interfaces"
+import ChatService from "../services/chat-service"
 
 export default class Actions {
     static setActiveChat(newChat: Indexed) {
@@ -18,6 +19,23 @@ export default class Actions {
 
         store.set("chats", state.chats)
         store.set("active_chat", newChat)
+    }
+
+    static getActiveChatUsers() {
+        const state = store.getState()
+        const chats = state.chats as Indexed[]
+
+        const currentActiveChat = chats.find((chat) => chat.active)
+
+        if (!currentActiveChat) {
+            return
+        }
+
+        ChatService.getChatUsers(currentActiveChat.id as number)
+    }
+
+    static setActiveChatUsers(users: Indexed) {
+        store.set("active_chat.users", users)
     }
 
     static unsetActiveChat() {

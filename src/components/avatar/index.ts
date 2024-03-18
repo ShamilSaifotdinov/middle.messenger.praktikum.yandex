@@ -1,10 +1,16 @@
-import Block from "../../utils/block"
+import Block, { Props } from "../../utils/block"
 import "./avatar.css"
 import template from "./tmp.hbs?raw"
 import avatarUrl from "./avatar.svg"
 
+interface AvatarProps extends Props {
+    src?: string
+    class?: string
+    onClick?: CallableFunction
+}
+
 class Avatar extends Block {
-    constructor(props: { src?: string, class?: string, onClick?: CallableFunction }) {
+    constructor(props: AvatarProps) {
         super("div", {
             src: props.src || avatarUrl,
             attrs: {
@@ -16,6 +22,14 @@ class Avatar extends Block {
                 })
             }
         })
+    }
+
+    componentDidUpdate(oldProps: AvatarProps, newProps: AvatarProps): boolean {
+        if (oldProps.src !== newProps.src && newProps.src === undefined) {
+            this.setProps({ src: avatarUrl })
+        }
+
+        return true
     }
 
     render() {
