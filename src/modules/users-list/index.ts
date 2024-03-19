@@ -49,6 +49,20 @@ export default class UsersList extends Block {
         bus.on("user-list:users", this.handleUsers.bind(this))
     }
 
+    getCheckedUsers() {
+        const userrows = (this.children as Record<string, Block>).userRows
+        const checkedUsers = (userrows.children.checkedUsers as Block[])
+
+        return checkedUsers || []
+    }
+
+    getUsers() {
+        const userrows = (this.children as Record<string, Block>).userRows
+        const users = (userrows.children.users as Block[])
+
+        return users || []
+    }
+
     componentDidUpdate(oldProps: Props, newProps: Props): boolean {
         if (
             (!oldProps.oldUsers && newProps.oldUsers)
@@ -58,9 +72,11 @@ export default class UsersList extends Block {
             )
         ) {
             const userrows = (this.children as Record<string, Block>).userRows
+            const checkedUsers = this.getCheckedUsers()
+
             const rows = (newProps.oldUsers as User[])
                 .filter(
-                    (user) => !(userrows.children.checkedUsers as Block[]).find(
+                    (user) => !checkedUsers.find(
                         (row) => row.props.id === user.id
                     )
                 )
@@ -86,13 +102,14 @@ export default class UsersList extends Block {
 
     handleUsers(users: User[]) {
         const userrows = (this.children as Record<string, Block>).userRows
+        const checkedUsers = this.getCheckedUsers()
+
         const rows = users
             .filter(
-                (user) => !(userrows.children.checkedUsers as Block[]).find(
+                (user) => !checkedUsers.find(
                     (row) => row.props.id === user.id
                 )
-            )
-            .map((user) => new UsersRow({
+            ).map((user) => new UsersRow({
                 ...user,
                 events: {
                     click: () => this.addUser(user)
@@ -109,10 +126,12 @@ export default class UsersList extends Block {
 
     addUser(user: Indexed) {
         const userrows = (this.children as Record<string, Block>).userRows
+        const users = this.getUsers()
+        const checkedUsers = this.getCheckedUsers()
 
-        const rows = (userrows.children.users as Block[]).filter((row) => row.props.id !== user.id)
+        const rows = users.filter((row) => row.props.id !== user.id)
         const checkedRows = [
-            ...(userrows.children.checkedUsers as Block[]),
+            ...checkedUsers,
             new UsersRow({
                 ...user,
                 checked: true,
@@ -132,8 +151,9 @@ export default class UsersList extends Block {
 
     removeUser(user: Indexed) {
         const userrows = (this.children as Record<string, Block>).userRows
+        const checkedUsers = this.getCheckedUsers()
 
-        const checkedRows = (userrows.children.checkedUsers as Block[]).filter(
+        const checkedRows = checkedUsers.filter(
             (row) => row.props.id !== user.id
         )
 

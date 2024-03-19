@@ -1,9 +1,11 @@
 import ChatAPI from "../api/chat-api"
+import ChatMessagesAPI from "../api/chat-messages-api"
 import { Indexed, UpdateChatModel } from "../interfaces"
 import store from "../store"
 import Actions from "../store/actions"
 
 const chatApi = new ChatAPI()
+const chatMessagesApi = new ChatMessagesAPI()
 
 export default class ChatService {
     public static async getChatUsers(id: number) {
@@ -79,6 +81,28 @@ export default class ChatService {
         } catch (error) {
             // Логика обработки ошибок
             console.error(error)
+        }
+    }
+
+    public static async getToken(id: number) {
+        try {
+            const res = await chatMessagesApi.request(id)
+
+            if (res.status !== 200) {
+                throw { type: "requestErr", desc: res }
+            }
+
+            console.log(res)
+
+            const { token } = JSON.parse(res.response)
+
+            store.set("active_chat.token", token)
+
+            // Останавливаем крутилку
+        } catch (error) {
+            // Логика обработки ошибок
+            console.error(error)
+            // return error
         }
     }
 }

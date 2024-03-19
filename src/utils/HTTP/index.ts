@@ -10,9 +10,9 @@ const enum METHODS {
 export interface Options<T = Record<string, unknown>> {
     method?: METHODS
     timeout?: number
+    headers?: Record<string, string>
     data?: Record<string, unknown> | T
     retries?: number
-    [key: string]: unknown
     withCredentials?: boolean
 }
 
@@ -60,13 +60,12 @@ class HTTPTransport {
     request = (
         url: string,
         options: OptionsRequest,
-        timeout: number | null = 5000
+        timeout: number = 5000
     ): Promise<XMLHttpRequest> => {
         const { method, data, headers }: Options<FormData> = options
 
         const withCredentials: boolean = options.withCredentials || false
 
-        console.log({ url, method, data, headers, timeout })
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest()
 
@@ -76,11 +75,19 @@ class HTTPTransport {
                 xhr.open(method, this.baseURL + url)
             }
 
+            xhr.timeout = timeout
+
             xhr.onload = () => {
                 resolve(xhr)
             }
 
             xhr.withCredentials = withCredentials
+
+            if (headers) {
+                Object.entries(headers).forEach(([ key, value ]) => {
+                    xhr.setRequestHeader(key, value)
+                })
+            }
 
             xhr.onabort = reject
             xhr.onerror = reject

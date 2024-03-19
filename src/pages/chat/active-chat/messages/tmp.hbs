@@ -1,0 +1,11 @@
+{{#each days }}
+    <section class="chat-day">
+        <span class="chat-day_date">{{ date }}</span>
+        {{#each messages }}
+            <div class="chat-msg chat-msg-{{ type }}">
+                <span class="chat-msg_text">{{ content }}</span>
+                <span class="chat-msg_time">{{ time }}</span>
+            </div>
+        {{/each }}
+    </section>
+{{/each }}

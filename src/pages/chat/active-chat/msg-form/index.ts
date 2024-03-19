@@ -1,14 +1,16 @@
-import Block from "../../../utils/block"
+import Block, { Props } from "../../../../utils/block"
 import tmp from "./tmp.hbs?raw"
 import "./msg-form.css"
-import BaseInput from "../../../components/baseInput"
-import UserServiceOld from "../../../services/user-service_old"
+import BaseInput from "../../../../components/baseInput"
 
-const userService = new UserServiceOld()
+interface MsgFormProps extends Props {
+    sendMessage: CallableFunction
+}
 
 export default class MsgForm extends Block {
-    constructor() {
+    constructor(props: MsgFormProps) {
         super("form", {
+            ...props,
             attrs: { class: "chat-input" },
             events: {
                 submit: (e: Event) => this.handleSubmit(e)
@@ -31,7 +33,9 @@ export default class MsgForm extends Block {
             new FormData(this.element as HTMLFormElement).entries()
         )
 
-        userService.sendMessage(data)
+        console.log(data);
+
+        (this.props as MsgFormProps).sendMessage(data.message)
 
         const target = e.target as HTMLFormElement
 

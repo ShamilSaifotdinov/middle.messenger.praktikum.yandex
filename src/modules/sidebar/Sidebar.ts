@@ -11,6 +11,8 @@ import Modal from "../../components/modal"
 import ChatsService from "../../services/chats-service"
 import isEqual from "../../utils/isEqual"
 import Actions from "../../store/actions"
+import store from "../../store"
+import { Indexed } from "../../interfaces"
 
 const router = Router.getInstance()
 
@@ -19,11 +21,16 @@ export default class Sidebar extends Block {
         props.chats = (props.raw_chats as Array<Record<string, unknown>>)
             .map((chat) => new ChatlistItem(chat))
 
+        const { user } = store.getState()
+
         super("div", {
             ...props,
             attrs: { class: "sidebar" },
             profile: new Avatar(
                 {
+                    src: (user as Indexed).avatar ? (
+                        "https://ya-praktikum.tech/api/v2/resources" + (user as Indexed).avatar
+                    ) : undefined,
                     onClick: () => {
                         router.go("/settings")
 
@@ -48,11 +55,6 @@ export default class Sidebar extends Block {
                 }
             })
         })
-    }
-
-    componentDidMount(): boolean {
-        ChatsService.getChats()
-        return true
     }
 
     componentDidUpdate(oldProps: Props, newProps: Props): boolean {

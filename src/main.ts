@@ -11,6 +11,7 @@ import UserController from "./services/user-controller"
 import store, { StoreEvents } from "./store"
 import { bus } from "./global"
 import { AuthMode } from "./utils/router/types"
+import ChatsService from "./services/chats-service"
 
 const pageData = {
     "/messenger": {
@@ -90,6 +91,12 @@ UserController.getUser().then(() => {
         // .use("/404", ErrorPage, { props: pageData["/404"] })
         .use("/500", ErrorPage, { props: pageData["/500"], title: "Ошибка 500" })
         .start()
+
+    const state = store.getState()
+
+    if (typeof state.user !== "undefined") {
+        ChatsService.getChats()
+    }
 })
 
 store.on(StoreEvents.Updated, () => {

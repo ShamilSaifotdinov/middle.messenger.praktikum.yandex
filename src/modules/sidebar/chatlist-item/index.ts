@@ -5,10 +5,15 @@ import Router from "../../../utils/router"
 import Avatar from "../../../components/avatar"
 import { Indexed } from "../../../interfaces"
 import Actions from "../../../store/actions"
+import { getLocalHourAndMinuteFromISO } from "../../../utils/getLocal"
+import { isObject } from "../../../utils/types"
 
 export default class ChatlistItem extends Block {
     constructor(props: Props) {
-        // console.log(props)
+        if (isObject(props.last_message) && typeof props.last_message.time === "string") {
+            props.last_message.time = getLocalHourAndMinuteFromISO(props.last_message.time)
+        }
+
         super("li", {
             ...props,
             avatar: new Avatar({

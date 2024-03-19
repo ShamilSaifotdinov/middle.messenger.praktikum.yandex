@@ -81,8 +81,15 @@ class Block {
         Object.entries(propsAndChildren).forEach(([ key, value ]) => {
             if (
                 value instanceof Block
-                || (value instanceof Array && value.every((e) => e instanceof Block))
-                || (this.children && this.children[key] && value === null)
+                || (
+                    value instanceof Array
+                    && value.length > 0
+                    && value.every((e) => e instanceof Block)
+                )
+                || (
+                    this.children && this.children[key]
+                    && (value === null || (value instanceof Array && value.length === 0))
+                )
             ) {
                 children[key] = value
             } else {
