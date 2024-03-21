@@ -5,19 +5,17 @@
 
 ## Страницы
 
-Главная: https://calm-buttercream-294e4a.netlify.app/
+Авторизация: https://calm-buttercream-294e4a.netlify.app
 
-Авторизация: https://calm-buttercream-294e4a.netlify.app/login.html
+Регистрация: https://calm-buttercream-294e4a.netlify.app/sign-up
 
-Регистрация: https://calm-buttercream-294e4a.netlify.app/registry.html
+Список чатов: https://calm-buttercream-294e4a.netlify.app/messenger
 
-Список чатов: https://calm-buttercream-294e4a.netlify.app/chats.html
+Настройка профиля: https://calm-buttercream-294e4a.netlify.app/settings
 
-Настройка профиля: https://calm-buttercream-294e4a.netlify.app/profile.html
+Ошибка 404: https://calm-buttercream-294e4a.netlify.app/404
 
-Ошибка 404: https://calm-buttercream-294e4a.netlify.app/404.html
-
-Ошибка 5**: https://calm-buttercream-294e4a.netlify.app/500.html
+Ошибка 5**: https://calm-buttercream-294e4a.netlify.app/500
 
 ## Прототипы экранов:
 https://www.figma.com/file/7YpDCAyyN1pABc652yZdAn/middle.messenger.praktikum.yandex?type=design&node-id=0%3A1&mode=design&t=pxa95Mdaqbfw1gZP-1
@@ -57,8 +55,8 @@ Typscript
 
 ## Функции
 
-Ввод данных в формы
+Авторизация и регистрация новых пользователей
 
-Сбор данных
+Настройка профиля (в том числе изменение аватара и пароля)
 
-Валидация данных
+Создание, редактирование (изменение аватара и добавление/удаление пользователей) и удаление чатов
