@@ -5,15 +5,6 @@ export default class ChatAPI extends BaseAPI {
         super("/chats")
     }
 
-    // request(id?: number) {
-    //     if (!id) {
-    //         throw "ChatAPI.request: need ID of chat"
-    //     }
-
-    //     return this.HTTP.get("", { data: { id }, withCredentials: true })
-    //     // .then(({ response }) => JSON.parse(response))
-    // }
-
     getChatUsers(id: number) {
         return this.HTTP.get(`/${id}/users`, { withCredentials: true })
     }
@@ -33,8 +24,11 @@ export default class ChatAPI extends BaseAPI {
         return this.HTTP.delete("/users", { data: { users, chatId }, withCredentials: true })
     }
 
-    // delete(data) {
-    //     return this.HTTP.delete("/", { data, withCredentials: true })
-    //         .then(({ response }) => JSON.parse(response))
-    // }
+    delete(chatId?: number) {
+        if (!chatId) {
+            throw new Error("ChatAPI.delete: need chatId")
+        }
+
+        return this.HTTP.delete("", { data: { chatId }, withCredentials: true })
+    }
 }

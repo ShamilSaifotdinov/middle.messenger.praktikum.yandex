@@ -2,7 +2,6 @@ import AuthAPI from "../api/auth-api"
 import { bus, fields } from "../global"
 import Router from "../utils/router"
 import { Indexed, RegistryFormModel, RegistryModel, err } from "../interfaces"
-// import Router from "../modules/router"
 import validator from "../utils/validator"
 
 const authApi = new AuthAPI()
@@ -37,7 +36,7 @@ const prepareUserRegistry = (user: RegistryFormModel): RegistryModel => ({
 
 const router = Router.getInstance()
 
-export default class UserRegistryController {
+export default class UserRegistryService {
     public static async registry(data: RegistryFormModel) {
         try {
             const validateData = userRegistryValidator(data)
@@ -53,12 +52,9 @@ export default class UserRegistryController {
             }
 
             bus.emit("getUser")
+            bus.emit("getChats")
 
             router.go("/messenger")
-
-            // console.log(userID)
-            // if (!!userID) {
-            // }
         } catch (error) {
             console.error(error)
 

@@ -4,7 +4,8 @@ import Sidebar from "./Sidebar"
 
 function mapChatToProps(state: Indexed) {
     return {
-        raw_chats: state.chats || []
+        raw_chats: state.chats || [],
+        user: state.user
     }
 }
 

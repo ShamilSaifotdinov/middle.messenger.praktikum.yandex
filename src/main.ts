@@ -7,7 +7,7 @@ import PageWindow from "./layout/window"
 import ProfilePage from "./pages/profile"
 import ChatPage from "./pages/chat"
 import Router from "./utils/router"
-import UserController from "./services/user-controller"
+import UserService from "./services/user-service"
 import store, { StoreEvents } from "./store"
 import { bus } from "./global"
 import { AuthMode } from "./utils/router/types"
@@ -65,9 +65,10 @@ const router = Router.getInstance()
 
 router.setRootQuery("#app")
 
-bus.on("getUser", () => UserController.getUser())
+bus.on("getUser", () => UserService.getUser())
+bus.on("getChats", () => ChatsService.getChats())
 
-UserController.getUser().then(() => {
+UserService.getUser().then(() => {
     router
         .use("*", Login, { authMode: AuthMode.onlyNotAuthrized, title: "Авторизация" })
         .use("*", ErrorPage, { props: pageData["/404"], title: "Ошибка 404" })

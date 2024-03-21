@@ -31,7 +31,6 @@ export default class UsersList extends Block {
         }
 
         super("div", {
-            // ...props,
             attrs: {
                 class: "users-list"
             },

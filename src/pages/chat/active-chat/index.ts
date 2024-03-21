@@ -1,4 +1,4 @@
-import { Indexed } from "../../../interfaces"
+import { Chat, Indexed } from "../../../interfaces"
 import Block, { Props } from "../../../utils/block"
 import template from "./tmp.hbs?raw"
 import "./active-chat.css"
@@ -9,9 +9,11 @@ import Avatar from "../../../components/avatar"
 import WS, { WSEvents } from "../../../utils/ws"
 import actions from "../../../store/actions"
 import Messages from "./messages"
+import Dropdown from "../../../components/dropdown"
+import DeleteChat from "./delete-chat"
 
 interface ActiveChatProps extends Props {
-    active_chat: Indexed
+    active_chat: Chat
     websocket?: WS
 }
 
@@ -23,60 +25,88 @@ export default class ActiveChat extends Block {
                 class: "chat_container"
             },
             avatar: new Avatar({
-                src: (props.active_chat && (props.active_chat as Indexed).avatar && (
+                src: (props.active_chat && props.active_chat.avatar && (
                     "https://ya-praktikum.tech/api/v2/resources"
-                    + (props.active_chat as Indexed).avatar
-                )) as string || undefined,
+                    + props.active_chat.avatar
+                )) || undefined,
                 onClick: () => {
                     this.setProps({ editChatModal: new Modal({
                         children: new EditChat({
+                            active_chat: props.active_chat,
                             onClose: () => this.setProps({ editChatModal: null })
                         })
                     }) })
                 }
             }),
+            dropdown: new Dropdown({
+                buttonClass: "chat_settings",
+                items: [ {
+                    title: "Удалить чат",
+                    color: "red",
+                    onClick: () => {
+                        this.setProps({ deleteChatModal: new Modal({
+                            children: new DeleteChat({
+                                onClose: () => this.setProps({ deleteChatModal: null }),
+                                chatId: props.active_chat.id
+                            })
+                        }) })
+                    }
+                } ]
+            }),
             messages: new Messages({
                 getOldMessages: () => this.getOldMessages(),
-                days: props.active_chat.days as Indexed[]
+                days: props.active_chat.days || []
             }),
             msgForm: new MsgForm({ sendMessage: (content: string) => this.sendMessage(content) })
         })
     }
 
-    componentDidMount(oldProps: Props): boolean {
-        console.log("CDM", oldProps)
-        return true
-    }
-
     componentDidUpdate(oldProps: ActiveChatProps, newProps: ActiveChatProps): boolean {
-        console.log(newProps)
         if (newProps.websocket && oldProps.websocket !== newProps.websocket) {
             newProps.websocket.on(WSEvents.message, (data: Indexed[]) => {
                 actions.addMessages(data)
             })
 
+            newProps.websocket.connect()
+
             newProps.websocket.on(WSEvents.open, () => {
-                (newProps.websocket as WS).send({
-                    content: "0",
-                    type: "get old"
-                })
+                if (newProps.websocket) {
+                    newProps.websocket.send({
+                        content: "0",
+                        type: "get old"
+                    })
+                }
             })
         }
 
+        if (oldProps.active_chat.avatar !== newProps.active_chat.avatar) {
+            (this.children.avatar as Avatar).setProps({
+                src: (newProps.active_chat.avatar && (
+                    "https://ya-praktikum.tech/api/v2/resources"
+                    + newProps.active_chat.avatar
+                )) || undefined
+            })
+            if (newProps.websocket) {
+                newProps.websocket.send({
+                    content: "0",
+                    type: "get old"
+                })
+            }
+        }
+
         if (newProps.active_chat.days) {
-            (this.children.messages as Block).setProps({ days: newProps.active_chat.days })
+            (this.children.messages as Messages).setProps({ days: newProps.active_chat.days })
         }
 
         return true
     }
 
     getOldMessages() {
-        console.log("get old mgs")
-        const { content } = this.props.active_chat as Indexed
+        const props = this.props as ActiveChatProps
+        const { content } = props.active_chat
 
-        if (typeof content === "number") {
-            console.log((content + 1) * 20);
-            (this.props.websocket as WS).send({
+        if (typeof content === "number" && props.websocket) {
+            props.websocket.send({
                 content: ((content + 1) * 20).toString(),
                 type: "get old"
             })
@@ -84,10 +114,13 @@ export default class ActiveChat extends Block {
     }
 
     sendMessage(content: string) {
-        (this.props.websocket as WS).send({
-            content,
-            type: "message"
-        })
+        const props = this.props as ActiveChatProps
+        if (props.websocket) {
+            props.websocket.send({
+                content,
+                type: "message"
+            })
+        }
     }
 
     render() {

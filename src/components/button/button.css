@@ -22,6 +22,12 @@
     border-color: $blue;
 }
 
+.button-red
+{
+    background-color: $red;
+    border-color: $red;
+}
+
 .button-outline-red
 {
     background-color: $main;

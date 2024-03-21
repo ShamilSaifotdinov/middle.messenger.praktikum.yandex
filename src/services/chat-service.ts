@@ -1,8 +1,9 @@
 import ChatAPI from "../api/chat-api"
 import ChatMessagesAPI from "../api/chat-messages-api"
-import { Indexed, UpdateChatModel } from "../interfaces"
+import { UpdateChatModel } from "../interfaces"
 import store from "../store"
-import Actions from "../store/actions"
+import actions from "../store/actions"
+import ChatsService from "./chats-service"
 
 const chatApi = new ChatAPI()
 const chatMessagesApi = new ChatMessagesAPI()
@@ -20,7 +21,7 @@ export default class ChatService {
 
             const users = JSON.parse(res.response)
 
-            Actions.setActiveChatUsers(users)
+            actions.setActiveChatUsers(users)
 
             // Останавливаем крутилку
         } catch (error) {
@@ -31,13 +32,13 @@ export default class ChatService {
 
     public static async updateChat(data: UpdateChatModel) {
         try {
-            console.log(data)
+            const activeChat = actions.getActiveChat()
 
-            if (Object.keys(data).length === 0) {
+            if (Object.keys(data).length === 0 || !(activeChat && activeChat.id)) {
                 return
             }
 
-            const chatId = (store.getState().active_chat as Indexed).id as number
+            const chatId = activeChat.id
 
             if (data.avatar) {
                 const res = await chatApi.updateAvatar(data.avatar, chatId)
@@ -75,9 +76,27 @@ export default class ChatService {
                 // const chat = JSON.parse(res.response)
             }
 
-            // Actions.setActiveChatUsers(users)
+            ChatsService.getChats()
 
             // Останавливаем крутилку
+        } catch (error) {
+            // Логика обработки ошибок
+            console.error(error)
+        }
+    }
+
+    public static async deleteChat(chatId: number) {
+        try {
+            const res = await chatApi.delete(chatId)
+
+            console.log(res)
+
+            if (res.status !== 200) {
+                throw { type: "requestErr", desc: res }
+            }
+
+            actions.unsetActiveChat()
+            ChatsService.getChats()
         } catch (error) {
             // Логика обработки ошибок
             console.error(error)

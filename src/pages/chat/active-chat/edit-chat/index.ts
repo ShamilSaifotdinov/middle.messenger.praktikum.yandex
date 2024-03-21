@@ -3,19 +3,21 @@ import Block, { Props } from "../../../../utils/block"
 import template from "./tmp.hbs?raw"
 import "./edit-chat.css"
 import Avatar from "../../../../components/avatar"
-import { Indexed, UpdateChatModel, User } from "../../../../interfaces"
+import { Chat, UpdateChatModel, User } from "../../../../interfaces"
 import Input from "../../../../components/field"
 import ChatsService from "../../../../services/chats-service"
 import UsersList from "../../../../modules/users-list"
 import isEqual from "../../../../utils/isEqual"
 import { getDifference } from "../../../../utils/setOps"
-import Actions from "../../../../store/actions"
 import store, { StoreEvents } from "../../../../store"
 import ChatService from "../../../../services/chat-service"
+import actions from "../../../../store/actions"
 
 interface EditChatProps extends Props {
     onClose: CallableFunction
+    active_chat: Chat
     users?: User[]
+    newAvatar?: File
 }
 
 export default class EditChat extends Block {
@@ -43,9 +45,6 @@ export default class EditChat extends Block {
             }
         })
 
-        const state = store.getState()
-        const activeChat = state.active_chat
-
         super("div", {
             ...props,
             attrs: {
@@ -53,10 +52,10 @@ export default class EditChat extends Block {
             },
             input,
             avatar: new Avatar({
-                src: (activeChat && (activeChat as Indexed).avatar && (
+                src: (props.active_chat && props.active_chat.avatar && (
                     "https://ya-praktikum.tech/api/v2/resources"
-                    + (activeChat as Indexed).avatar
-                )) as string || undefined,
+                    + props.active_chat.avatar
+                )) || undefined,
                 class: "new-avatar"
             }),
             userRows: new UsersList(),
@@ -76,18 +75,18 @@ export default class EditChat extends Block {
         })
         store.on(StoreEvents.Updated, this.sub)
 
-        Actions.getActiveChatUsers()
+        actions.requestActiveChatUsers()
     }
 
     sub = () => {
-        const state = store.getState()
+        const activeChat = actions.getActiveChat()
 
-        if ((state.active_chat as Indexed).users) {
-            this.setProps({ users: (state.active_chat as Indexed).users })
+        if (activeChat && activeChat.users) {
+            this.setProps({ users: activeChat.users })
         }
     }
 
-    componentDidUpdate(oldProps: Props, newProps: Props): boolean {
+    componentDidUpdate(oldProps: EditChatProps, newProps: EditChatProps): boolean {
         if (
             (!oldProps.users && newProps.users)
             || (
@@ -106,9 +105,10 @@ export default class EditChat extends Block {
     }
 
     handleUpdateChat() {
+        const props = this.props as EditChatProps
         const data: UpdateChatModel = {}
-        if (this.props.newAvatar) {
-            data.avatar = this.props.newAvatar as File
+        if (props.newAvatar) {
+            data.avatar = props.newAvatar
         }
 
         const children = this.children as Record<string, Block>
@@ -117,7 +117,7 @@ export default class EditChat extends Block {
             children.userRows.children.userRows as Block
         ).children.checkedUsers as Block[]
 
-        const oldUsers = new Set((this.props.users as User[]).map((user) => user.id))
+        const oldUsers = new Set((props.users as User[]).map((user) => user.id))
         const newUsers = new Set(userrows.map((user) => (user.props as User).id))
 
         const addUsers = Array.from(getDifference<number>(newUsers, oldUsers))
@@ -133,8 +133,8 @@ export default class EditChat extends Block {
 
         ChatService.updateChat(data)
 
-        store.off(StoreEvents.Updated, this.sub);
-        (this.props as EditChatProps).onClose()
+        store.off(StoreEvents.Updated, this.sub)
+        props.onClose()
     }
 
     render() {

@@ -11,25 +11,30 @@ import Modal from "../../components/modal"
 import ChatsService from "../../services/chats-service"
 import isEqual from "../../utils/isEqual"
 import Actions from "../../store/actions"
-import store from "../../store"
-import { Indexed } from "../../interfaces"
+import { Chat, User } from "../../interfaces"
 
 const router = Router.getInstance()
 
-export default class Sidebar extends Block {
-    constructor(props: Props) {
-        props.chats = (props.raw_chats as Array<Record<string, unknown>>)
-            .map((chat) => new ChatlistItem(chat))
+interface SidebarProps extends Props {
+    raw_chats?: Array<Chat>
+    user?: User
+    chats?: ChatlistItem[]
+}
 
-        const { user } = store.getState()
+export default class Sidebar extends Block {
+    constructor(props: SidebarProps) {
+        if (props.raw_chats) {
+            props.chats = props.raw_chats
+                .map((chat) => new ChatlistItem(chat))
+        }
 
         super("div", {
             ...props,
             attrs: { class: "sidebar" },
             profile: new Avatar(
                 {
-                    src: (user as Indexed).avatar ? (
-                        "https://ya-praktikum.tech/api/v2/resources" + (user as Indexed).avatar
+                    src: (props.user && props.user.avatar) ? (
+                        "https://ya-praktikum.tech/api/v2/resources" + props.user.avatar
                     ) : undefined,
                     onClick: () => {
                         router.go("/settings")
@@ -57,11 +62,22 @@ export default class Sidebar extends Block {
         })
     }
 
-    componentDidUpdate(oldProps: Props, newProps: Props): boolean {
-        if (!isEqual(oldProps.raw_chats as unknown[], newProps.raw_chats as unknown[])) {
+    componentDidUpdate(oldProps: SidebarProps, newProps: SidebarProps): boolean {
+        if (
+            newProps.raw_chats
+            && !isEqual(oldProps.raw_chats as unknown[], newProps.raw_chats as unknown[])
+        ) {
             this.setProps({
-                chats: (newProps.raw_chats as Array<Record<string, unknown>>)
+                chats: newProps.raw_chats
                     .map((chat) => new ChatlistItem(chat))
+            })
+        }
+
+        if (newProps.user) {
+            (this.children.profile as Avatar).setProps({
+                src: newProps.user.avatar ? (
+                    "https://ya-praktikum.tech/api/v2/resources" + newProps.user.avatar
+                ) : undefined
             })
         }
 

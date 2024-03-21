@@ -1,0 +1,35 @@
+.dropdown
+{
+    position: relative;
+}
+
+.dropdown-items
+{
+    display: none;
+    position: absolute;
+    margin: 0;
+    list-style-type: none;
+    padding: 0;
+    right: 0;
+    width: min-content;
+    border: 1px solid $deep_grey;
+    border-radius: .25rem;
+    z-index: 1000;
+    background-color: $main;
+}
+
+.dropdown-items-opened
+{
+    display: block;
+}
+
+.dropdown-item
+{
+    width: max-content;
+    padding: .5rem 1rem;
+}
+
+.dropdown-item-red
+{
+    color: $red;
+}

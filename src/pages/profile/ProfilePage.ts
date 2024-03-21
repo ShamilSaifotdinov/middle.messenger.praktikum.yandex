@@ -6,7 +6,7 @@ import DetailsRow from "./details-row"
 import { bus, fields } from "../../global"
 import Link from "../../components/link"
 import Button from "../../components/button"
-import UserLoginController from "../../services/user-login"
+import UserLoginService from "../../services/user-login"
 import isEqual from "../../utils/isEqual"
 import { ProfileFormModel } from "../../interfaces"
 import ProfileService from "../../services/profile-service"
@@ -58,7 +58,7 @@ export default class ProfilePage extends Block {
                 type: "submit",
                 color: "outline-red",
                 onClick: () => {
-                    UserLoginController.logout()
+                    UserLoginService.logout()
                 }
             }),
             avatar: new Avatar({

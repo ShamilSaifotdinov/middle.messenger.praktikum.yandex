@@ -2,7 +2,6 @@ import AuthAPI from "../api/auth-api"
 import { bus, fields } from "../global"
 import Router from "../utils/router"
 import { LoginFormModel } from "../interfaces"
-// import Router from "../modules/router"
 import validator from "../utils/validator"
 
 const authApi = new AuthAPI()
@@ -24,7 +23,7 @@ const userLoginValidator = validator(
 
 const router = Router.getInstance()
 
-export default class UserLoginController {
+export default class UserLoginService {
     public static async login(data: LoginFormModel) {
         try {
             // Запускаем крутилку
@@ -46,10 +45,7 @@ export default class UserLoginController {
             }
 
             bus.emit("getUser")
-
-            // console.log(userID)
-            // if (!!userID) {
-            // }
+            bus.emit("getChats")
 
             router.go("/messenger")
 
@@ -75,6 +71,9 @@ export default class UserLoginController {
             bus.emit("getUser")
 
             router.go("/")
+
+            bus.emit("getUser")
+            bus.emit("getChats")
 
             // Останавливаем крутилку
         } catch (error) {

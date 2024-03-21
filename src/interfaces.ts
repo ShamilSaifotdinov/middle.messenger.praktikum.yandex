@@ -47,6 +47,23 @@ export interface NewChat extends Indexed {
     users: number[]
 }
 
+export interface LastMessage extends Indexed {
+    user: User
+    time: string
+    content?: string
+}
+
+export interface Chat extends Indexed {
+    id: number
+    title: string
+    avatar: string
+    unread_count: number
+    last_message: LastMessage | null
+    days?: Indexed[]
+    content?: number
+    token?: string
+}
+
 export interface User extends Indexed {
     id: number
     first_name: string

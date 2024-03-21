@@ -15,11 +15,5 @@ export default class ChatsAPI extends BaseAPI {
 
     request() {
         return this.HTTP.get("/", { withCredentials: true })
-        // .then(({ response }) => JSON.parse(response))
     }
-
-    // delete(data) {
-    //     return this.HTTP.delete("/", { data, withCredentials: true })
-    //         .then(({ response }) => JSON.parse(response))
-    // }
 }

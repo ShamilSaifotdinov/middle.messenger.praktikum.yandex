@@ -21,7 +21,6 @@ export default class AuthAPI extends BaseAPI {
 
     public getUser() {
         return this.HTTP.get("/user", { withCredentials: true })
-        // Обрабатываем получение данных из сервиса далее
     }
 
     public create(user?: RegistryModel) {
@@ -30,7 +29,6 @@ export default class AuthAPI extends BaseAPI {
         }
 
         return this.HTTP.post("/signup", { data: user, withCredentials: true })
-        // Обрабатываем получение данных из сервиса далее
     }
 
     public delete() {

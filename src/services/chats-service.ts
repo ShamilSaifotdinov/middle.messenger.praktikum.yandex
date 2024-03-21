@@ -2,7 +2,7 @@ import ChatsAPI from "../api/chats-api"
 import UserAPI from "../api/user-api"
 import { bus } from "../global"
 import { NewChat } from "../interfaces"
-import store from "../store"
+import actions from "../store/actions"
 import validator from "../utils/validator"
 
 const chatAPI = new ChatsAPI()
@@ -23,7 +23,7 @@ export default class ChatsService {
 
             const chats = JSON.parse(res.response)
 
-            store.set("chats", chats)
+            actions.setNewChats(chats)
 
             // Останавливаем крутилку
         } catch (error) {
@@ -84,6 +84,10 @@ export default class ChatsService {
             }
 
             bus.emit("chats-createChat:created")
+
+            ChatsService.getChats().then(() => {
+                actions.setActiveChat(chatId)
+            })
 
             // Останавливаем крутилку
         } catch (error) {

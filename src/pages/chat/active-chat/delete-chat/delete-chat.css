@@ -1,0 +1,17 @@
+.delete-chat
+{
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.delete-chat .auth_title
+{
+    margin-bottom: 1.25rem;
+}
+
+.delete-chat_cancel
+{
+    margin-top: .75rem;
+}

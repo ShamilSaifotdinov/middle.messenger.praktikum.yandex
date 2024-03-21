@@ -4,7 +4,7 @@ import Block from "../../utils/block"
 import tmp from "./tmp.hbs?raw"
 import Form from "../../components/form"
 import { bus, fields } from "../../global"
-import UserLoginController from "../../services/user-login"
+import UserLoginService from "../../services/user-login"
 import { LoginFormModel } from "../../interfaces"
 
 const localFields = [ "login", "password" ]
@@ -82,7 +82,7 @@ export default class Login extends Block {
             return
         }
 
-        UserLoginController.login(data)
+        UserLoginService.login(data)
     }
 
     render() {

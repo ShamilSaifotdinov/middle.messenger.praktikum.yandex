@@ -4,7 +4,7 @@ import { Indexed, err } from "../interfaces"
 
 const authApi = new AuthAPI()
 
-export default class UserController {
+export default class UserService {
     public static async getUser() {
         try {
             const res = await authApi.getUser()

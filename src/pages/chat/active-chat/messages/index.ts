@@ -27,11 +27,6 @@ export default class Messages extends Block {
         })
     }
 
-    // componentDidUpdate(oldProps: Props, newProps: Props): boolean {
-    //     this.getContent().scrollTop = newProps.scrollTop as number
-    //     return true
-    // }
-
     render() {
         return this.compile(template, this.props)
     }

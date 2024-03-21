@@ -6,13 +6,6 @@ export default class UserAPI extends BaseAPI {
         super("/user")
     }
 
-    // create() {
-    //     return this.HTTP.post("/", {})
-    //         // И то, только в случае, если уверены в результате,
-    //         // иначе контроллер проверит все сам дальше
-    //         .then(({user: {info}}) => info)
-    // }
-
     updateProfile(profile: ProfileFormModel) {
         return this.HTTP.put("/profile", { data: profile, withCredentials: true })
     }

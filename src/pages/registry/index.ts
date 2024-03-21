@@ -4,7 +4,7 @@ import Block from "../../utils/block"
 import tmp from "./tmp.hbs?raw"
 import Form from "../../components/form"
 import { bus, fields } from "../../global"
-import UserRegistryController from "../../services/user-registry"
+import UserRegistryService from "../../services/user-registry"
 import { RegistryFormModel } from "../../interfaces"
 
 const localFields = [ "first_name", "second_name", "login", "email", "phone", "password" ]
@@ -116,7 +116,7 @@ export default class Registry extends Block {
             return
         }
 
-        UserRegistryController.registry(data)
+        UserRegistryService.registry(data)
     }
 
     render() {

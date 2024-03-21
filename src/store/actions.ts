@@ -1,28 +1,47 @@
 import store from "."
-import { Indexed, User } from "../interfaces"
+import { Chat, Indexed, User } from "../interfaces"
 import ChatService from "../services/chat-service"
 import { getLocalHourAndMinuteFromISO } from "../utils/getLocal"
 import { isObject } from "../utils/types"
-// import WS from "../utils/ws"
 
 type days = Array<{
     messages: Indexed[]
 }>
 
 class Actions {
-    setActiveChat(newChat: Indexed) {
+    getUser(): User | undefined {
+        const state = store.getState()
+        const user = state.user as User | undefined
+
+        return user
+    }
+
+    setNewChats(chats: Chat[]) {
+        const state = store.getState()
+        const activeChat = state.active_chat as Chat | undefined
+
+        store.set("chats", chats)
+
+        if (activeChat) {
+            this.setActiveChat(activeChat.id)
+        }
+    }
+
+    setActiveChat(chatId: number) {
         const state = store.getState()
         const chats = state.chats as Indexed[]
 
         const currentActiveChatIndex = chats.findIndex(
-            (chat) => chat.id !== newChat.id && chat.active
+            (chat) => chat.id !== chatId && chat.active
         )
 
         if (currentActiveChatIndex !== -1) {
             chats[currentActiveChatIndex].active = undefined
         }
 
-        chats[chats.findIndex((chat) => chat.id === newChat.id)].active = true
+        const newChat = chats[chats.findIndex((chat) => chat.id === chatId)]
+
+        newChat.active = true
 
         store.set("chats", state.chats)
         store.set("active_chat", {
@@ -32,12 +51,19 @@ class Actions {
         })
     }
 
+    getActiveChat(): Chat | undefined {
+        const state = store.getState()
+        const activeChat = state.active_chat as Chat | undefined
+
+        return activeChat
+    }
+
     addMessages(data: unknown) {
         const state = store.getState()
         const activeChat = state.active_chat as Indexed
         const days = activeChat.days as days
 
-        console.log(data)
+        // console.log(data)
 
         if (data instanceof Array) {
             if (data.length === 0) {
@@ -83,17 +109,14 @@ class Actions {
         }
     }
 
-    getActiveChatUsers() {
-        const state = store.getState()
-        const chats = state.chats as Indexed[]
+    requestActiveChatUsers() {
+        const activeChat = this.getActiveChat()
 
-        const currentActiveChat = chats.find((chat) => chat.active)
-
-        if (!currentActiveChat) {
+        if (!activeChat) {
             return
         }
 
-        ChatService.getChatUsers(currentActiveChat.id as number)
+        ChatService.getChatUsers(activeChat.id)
     }
 
     setActiveChatUsers(users: Indexed) {
