@@ -26,7 +26,6 @@ export default class UserService {
 
                 if (customErr.desc.status === 401) {
                     store.set("user", null)
-                    router.go("/")
                 }
 
                 if (customErr.desc.status === 500) {
