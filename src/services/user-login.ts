@@ -1,7 +1,7 @@
 import AuthAPI from "../api/auth-api"
 import { bus, fields } from "../global"
 import Router from "../utils/router"
-import { LoginFormModel } from "../interfaces"
+import { err, Indexed, LoginFormModel } from "../interfaces"
 import validator from "../utils/validator"
 
 const authApi = new AuthAPI()
@@ -26,19 +26,13 @@ const router = Router.getInstance()
 export default class UserLoginService {
     public static async login(data: LoginFormModel) {
         try {
-            // Запускаем крутилку
-
             const validateData = userLoginValidator(data)
 
             if (!validateData.isCorrect) {
-                // throw new Error(validateData)
                 throw validateData
             }
 
-            // const userID = authApi.request(prepareDataToRequest(data));
             const res = await authApi.request(data)
-
-            console.log(res)
 
             if (res.status !== 200) {
                 throw { type: "requestErr", desc: res }
@@ -48,21 +42,37 @@ export default class UserLoginService {
             bus.emit("getChats")
 
             router.go("/messenger")
-
-            // Останавливаем крутилку
         } catch (error) {
-            // Логика обработки ошибок
             console.error(error)
-            bus.emit("badLogin")
+            if ((error as Indexed).type) {
+                const customErr = error as err
+
+                if (customErr.type === "requestErr") {
+                    if (customErr.desc.response) {
+                        const { reason }: { reason: string } = JSON.parse(
+                            customErr.desc.response as string
+                        )
+
+                        if (customErr.desc.status === 400) {
+                            bus.emit("reqErr", reason)
+                        }
+                    }
+
+                    if (customErr.desc.status === 401) {
+                        bus.emit("badLogin")
+                    }
+
+                    if (customErr.desc.status === 500) {
+                        router.go("/500")
+                    }
+                }
+            }
         }
     }
 
     public static async logout() {
         try {
-            // Запускаем крутилку
             const res = await authApi.delete()
-
-            console.log(res)
 
             if (res.status !== 200) {
                 throw { type: "requestErr", desc: res }
@@ -74,21 +84,18 @@ export default class UserLoginService {
 
             bus.emit("getUser")
             bus.emit("getChats")
-
-            // Останавливаем крутилку
         } catch (error) {
-            // Логика обработки ошибок
             console.error(error)
+
+            if ((error as Indexed).type) {
+                const customErr = error as err
+
+                if (customErr.type === "requestErr") {
+                    if (customErr.desc.status === 500) {
+                        router.go("/500")
+                    }
+                }
+            }
         }
     }
 }
-
-// С использованием декораторов
-// class UserLoginController {
-//     @validate(userLoginValidateRules)
-//     @handleError(handler)
-//     public async login(data: LoginFormModel) {
-//         const userID = loginApi.request(prepareDataToRequest(data));
-//         RouteManagement.go('/chats');
-//     }
-// }

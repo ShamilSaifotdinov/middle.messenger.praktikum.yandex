@@ -5,8 +5,11 @@ import {
     AvatarFormModel, Indexed, ProfileFormModel, UpdatePasswordFormModel, err
 } from "../interfaces"
 import validator from "../utils/validator"
+import Router from "../utils/router"
 
 const userApi = new UserAPI()
+const router = Router.getInstance()
+
 const profileValidator = validator(
     [
         "first_name",
@@ -55,8 +58,6 @@ export default class ProfileService {
 
             const res = await userApi.updateProfile(profile)
 
-            console.log(res)
-
             if (res.status !== 200) {
                 throw { type: "requestErr", desc: res }
             }
@@ -73,6 +74,21 @@ export default class ProfileService {
 
                 if (customErr.desc.status === 401) {
                     store.set("user", null)
+                    router.go("/")
+                }
+
+                if (customErr.desc.response) {
+                    const { reason }: { reason: string | undefined } = JSON.parse(
+                        customErr.desc.response as string
+                    )
+
+                    if (customErr.desc.status === 400 && reason) {
+                        bus.emit("user:profileUpdateErr", reason)
+                    }
+                }
+
+                if (customErr.desc.status === 500) {
+                    router.go("/500")
                 }
             }
         }
@@ -88,8 +104,6 @@ export default class ProfileService {
 
             const res = await userApi.updatePassword(preparePasswords(passwords))
 
-            console.log(res)
-
             if (res.status !== 200) {
                 throw { type: "requestErr", desc: res }
             }
@@ -104,13 +118,21 @@ export default class ProfileService {
                 if (customErr.desc.status === 400) {
                     bus.emit("user-updatePassword:badOldPassword")
                 }
+
+                if (customErr.desc.status === 401) {
+                    store.set("user", null)
+                    router.go("/")
+                }
+
+                if (customErr.desc.status === 500) {
+                    router.go("/500")
+                }
             }
         }
     }
 
     public static async updateAvatar(data: AvatarFormModel) {
         try {
-            console.log(data)
             const validateData = avatarValidator(data)
 
             if (!validateData.isCorrect) {
@@ -118,8 +140,6 @@ export default class ProfileService {
             }
 
             const res = await userApi.updateAvatar(data.avatar)
-
-            console.log(res)
 
             if (res.status !== 200) {
                 throw { type: "requestErr", desc: res }
@@ -140,6 +160,15 @@ export default class ProfileService {
                     if (res.reason) {
                         bus.emit("user-updateAvatar:err", res.reason)
                     }
+                }
+
+                if (customErr.desc.status === 401) {
+                    store.set("user", null)
+                    router.go("/")
+                }
+
+                if (customErr.desc.status === 500) {
+                    router.go("/500")
                 }
             }
         }

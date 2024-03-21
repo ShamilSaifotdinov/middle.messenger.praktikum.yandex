@@ -103,6 +103,7 @@ export default class ProfilePage extends Block {
         })
 
         bus.on("user:profileIsChanged", () => this.setProps({ isChangeable: false }))
+        bus.on("user:profileUpdateErr", this.reqError.bind(this))
     }
 
     componentDidUpdate(oldProps: PropsProfileDetails, newProps: PropsProfileDetails) {
@@ -129,6 +130,11 @@ export default class ProfilePage extends Block {
         }
 
         return true
+    }
+
+    reqError(reason: string) {
+        const inputs = this.props.detailsChangeableRows as DetailsRowsType
+        ((inputs.phone as DetailsRow).children.input as Block).setProps({ invalidMsg: reason })
     }
 
     handleUpdateProfile(data: ProfileFormModel) {

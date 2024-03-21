@@ -11,6 +11,11 @@
     margin-bottom: 1.25rem;
 }
 
+.delete-chat_err-msg
+{
+    color: $red;
+}
+
 .delete-chat_cancel
 {
     margin-top: .75rem;

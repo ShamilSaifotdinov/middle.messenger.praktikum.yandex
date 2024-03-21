@@ -12,6 +12,7 @@ import { getDifference } from "../../../../utils/setOps"
 import store, { StoreEvents } from "../../../../store"
 import ChatService from "../../../../services/chat-service"
 import actions from "../../../../store/actions"
+import { bus } from "../../../../global"
 
 interface EditChatProps extends Props {
     onClose: CallableFunction
@@ -75,6 +76,12 @@ export default class EditChat extends Block {
         })
         store.on(StoreEvents.Updated, this.sub)
 
+        bus.on("updateChat:chatUpdated", () => {
+            store.off(StoreEvents.Updated, this.sub)
+            props.onClose()
+        })
+        bus.on("updateChat:err", (msg: string) => this.setProps({ errMsg: msg }))
+
         actions.requestActiveChatUsers()
     }
 
@@ -132,9 +139,6 @@ export default class EditChat extends Block {
         }
 
         ChatService.updateChat(data)
-
-        store.off(StoreEvents.Updated, this.sub)
-        props.onClose()
     }
 
     render() {

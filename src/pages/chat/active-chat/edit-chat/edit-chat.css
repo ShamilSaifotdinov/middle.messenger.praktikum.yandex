@@ -7,6 +7,11 @@
     gap: 1.25rem;
 }
 
+.edit-chat_err-msg
+{
+    color: $red;
+}
+
 .edit-chat_footer
 {
     display: flex;

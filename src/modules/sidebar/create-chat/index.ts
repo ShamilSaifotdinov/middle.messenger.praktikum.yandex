@@ -50,6 +50,12 @@ export default class CreateChat extends Block {
         })
 
         bus.on("chats-createChat:created", () => props.onClose())
+        bus.on("chats-createChat:err", this.reqError.bind(this))
+    }
+
+    reqError(reason: string) {
+        const chatTitle = this.children.chatTitle as Input
+        chatTitle.setProps({ invalidMsg: reason })
     }
 
     handleCreateChat() {

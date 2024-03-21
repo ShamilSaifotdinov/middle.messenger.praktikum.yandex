@@ -95,7 +95,7 @@ class Actions {
         }
 
         if (isObject(data) && data.type === "message") {
-            console.log(days[0].messages)
+            // console.log(days[0].messages)
 
             if (data.user_id === (state.user as User).id) {
                 data.type = "outcome"

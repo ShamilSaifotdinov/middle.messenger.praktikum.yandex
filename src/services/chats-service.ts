@@ -1,12 +1,15 @@
 import ChatsAPI from "../api/chats-api"
 import UserAPI from "../api/user-api"
 import { bus } from "../global"
-import { NewChat } from "../interfaces"
+import { err, Indexed, NewChat } from "../interfaces"
+import store from "../store"
 import actions from "../store/actions"
+import Router from "../utils/router"
 import validator from "../utils/validator"
 
 const chatAPI = new ChatsAPI()
 const userAPI = new UserAPI()
+const router = Router.getInstance()
 
 const newChatValidator = validator([ "title" ])
 
@@ -15,8 +18,6 @@ export default class ChatsService {
         try {
             const res = await chatAPI.request()
 
-            console.log(res)
-
             if (res.status !== 200) {
                 throw { type: "requestErr", desc: res }
             }
@@ -24,11 +25,21 @@ export default class ChatsService {
             const chats = JSON.parse(res.response)
 
             actions.setNewChats(chats)
-
-            // Останавливаем крутилку
         } catch (error) {
-            // Логика обработки ошибок
             console.error(error)
+
+            if ((error as Indexed).type === "requestErr") {
+                const customErr = error as err
+
+                if (customErr.desc.status === 401) {
+                    store.set("user", null)
+                    router.go("/")
+                }
+
+                if (customErr.desc.status === 500) {
+                    router.go("/500")
+                }
+            }
         }
     }
 
@@ -42,16 +53,34 @@ export default class ChatsService {
                 throw { type: "requestErr", desc: res }
             }
 
-            console.log(res)
-
             const users = JSON.parse(res.response)
 
             bus.emit("user-list:users", users)
-
-            // Останавливаем крутилку
         } catch (error) {
-            // Логика обработки ошибок
             console.error(error)
+
+            if ((error as Indexed).type === "requestErr") {
+                const customErr = error as err
+
+                if (customErr.desc.response) {
+                    const { reason }: { reason: string | undefined } = JSON.parse(
+                        customErr.desc.response as string
+                    )
+
+                    if (customErr.desc.status === 400 && reason) {
+                        bus.emit("user-list:err", reason)
+                    }
+                }
+
+                if (customErr.desc.status === 401) {
+                    store.set("user", null)
+                    router.go("/")
+                }
+
+                if (customErr.desc.status === 500) {
+                    router.go("/500")
+                }
+            }
         }
     }
 
@@ -65,8 +94,6 @@ export default class ChatsService {
 
             const resChat = await chatAPI.create(chat.title)
 
-            console.log(resChat)
-
             if (resChat.status !== 200) {
                 throw { type: "requestErr", desc: resChat }
             }
@@ -75,8 +102,6 @@ export default class ChatsService {
 
             if (chatId && chat.users.length > 0) {
                 const resUsers = await chatAPI.addUsers({ chatId, users: chat.users })
-
-                console.log(resUsers)
 
                 if (resUsers.status !== 200) {
                     throw { type: "requestErr", desc: resUsers }
@@ -88,11 +113,31 @@ export default class ChatsService {
             ChatsService.getChats().then(() => {
                 actions.setActiveChat(chatId)
             })
-
-            // Останавливаем крутилку
         } catch (error) {
-            // Логика обработки ошибок
             console.error(error)
+
+            if ((error as Indexed).type === "requestErr") {
+                const customErr = error as err
+
+                if (customErr.desc.response) {
+                    const { reason }: { reason: string | undefined } = JSON.parse(
+                        customErr.desc.response as string
+                    )
+
+                    if (customErr.desc.status === 400 && reason) {
+                        bus.emit("chats-createChat:err", reason)
+                    }
+                }
+
+                if (customErr.desc.status === 401) {
+                    store.set("user", null)
+                    router.go("/")
+                }
+
+                if (customErr.desc.status === 500) {
+                    router.go("/500")
+                }
+            }
         }
     }
 }

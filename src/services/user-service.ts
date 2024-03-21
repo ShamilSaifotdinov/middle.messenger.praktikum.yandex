@@ -1,15 +1,15 @@
 import AuthAPI from "../api/auth-api"
 import store from "../store"
 import { Indexed, err } from "../interfaces"
+import Router from "../utils/router"
 
 const authApi = new AuthAPI()
+const router = Router.getInstance()
 
 export default class UserService {
     public static async getUser() {
         try {
             const res = await authApi.getUser()
-
-            console.log(res)
 
             if (res.status !== 200) {
                 throw { type: "requestErr", desc: res }
@@ -26,6 +26,11 @@ export default class UserService {
 
                 if (customErr.desc.status === 401) {
                     store.set("user", null)
+                    router.go("/")
+                }
+
+                if (customErr.desc.status === 500) {
+                    router.go("/500")
                 }
             }
         }

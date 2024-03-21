@@ -46,6 +46,7 @@ export default class UsersList extends Block {
         })
 
         bus.on("user-list:users", this.handleUsers.bind(this))
+        bus.on("user-list:err", this.reqError.bind(this))
     }
 
     getCheckedUsers() {
@@ -157,6 +158,11 @@ export default class UsersList extends Block {
         )
 
         userrows.setProps({ checkedUsers: checkedRows })
+    }
+
+    reqError(reason: string) {
+        const search = this.children.search as Input
+        search.setProps({ invalidMsg: reason })
     }
 
     render() {

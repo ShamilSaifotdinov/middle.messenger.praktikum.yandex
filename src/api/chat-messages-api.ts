@@ -11,9 +11,4 @@ export default class ChatMessagesAPI extends BaseAPI {
         }
         return this.HTTP.post(`/token/${chatId}`, { withCredentials: true })
     }
-
-    // delete(data) {
-    //     return this.HTTP.delete("/", { data, withCredentials: true })
-    //         .then(({ response }) => JSON.parse(response))
-    // }
 }

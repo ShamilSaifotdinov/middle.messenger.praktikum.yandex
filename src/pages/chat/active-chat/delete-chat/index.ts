@@ -3,6 +3,7 @@ import template from "./tmp.hbs?raw"
 import "./delete-chat.css"
 import Button from "../../../../components/button"
 import ChatService from "../../../../services/chat-service"
+import { bus } from "../../../../global"
 
 export default class DeleteChat extends Block {
     constructor(props : { onClose: CallableFunction, chatId: number }) {
@@ -24,6 +25,8 @@ export default class DeleteChat extends Block {
                 onClick: () => props.onClose()
             })
         })
+
+        bus.on("deleteChat:err", (msg: string) => this.setProps({ errMsg: msg }))
     }
 
     render() {

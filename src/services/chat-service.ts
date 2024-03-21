@@ -1,12 +1,15 @@
 import ChatAPI from "../api/chat-api"
 import ChatMessagesAPI from "../api/chat-messages-api"
-import { UpdateChatModel } from "../interfaces"
+import { bus } from "../global"
+import { err, Indexed, UpdateChatModel } from "../interfaces"
 import store from "../store"
 import actions from "../store/actions"
+import Router from "../utils/router"
 import ChatsService from "./chats-service"
 
 const chatApi = new ChatAPI()
 const chatMessagesApi = new ChatMessagesAPI()
+const router = Router.getInstance()
 
 export default class ChatService {
     public static async getChatUsers(id: number) {
@@ -17,16 +20,28 @@ export default class ChatService {
                 throw { type: "requestErr", desc: res }
             }
 
-            console.log(res)
-
             const users = JSON.parse(res.response)
 
             actions.setActiveChatUsers(users)
-
-            // Останавливаем крутилку
         } catch (error) {
-            // Логика обработки ошибок
             console.error(error)
+
+            if ((error as Indexed).type === "requestErr") {
+                const customErr = error as err
+
+                if (customErr.desc.status === 401) {
+                    store.set("user", null)
+                    router.go("/")
+                }
+
+                if (customErr.desc.status === 404) {
+                    router.go("/404")
+                }
+
+                if (customErr.desc.status === 500) {
+                    router.go("/500")
+                }
+            }
         }
     }
 
@@ -46,10 +61,6 @@ export default class ChatService {
                 if (res.status !== 200) {
                     throw { type: "requestErr", desc: res }
                 }
-
-                console.log(res)
-
-                // const chat = JSON.parse(res.response)
             }
 
             if (data.add) {
@@ -58,10 +69,6 @@ export default class ChatService {
                 if (res.status !== 200) {
                     throw { type: "requestErr", desc: res }
                 }
-
-                console.log(res)
-
-                // const chat = JSON.parse(res.response)
             }
 
             if (data.delete) {
@@ -70,26 +77,42 @@ export default class ChatService {
                 if (res.status !== 200) {
                     throw { type: "requestErr", desc: res }
                 }
-
-                console.log(res)
-
-                // const chat = JSON.parse(res.response)
             }
 
-            ChatsService.getChats()
+            bus.emit("updateChat:chatUpdated")
 
-            // Останавливаем крутилку
+            ChatsService.getChats()
         } catch (error) {
-            // Логика обработки ошибок
             console.error(error)
+
+            if ((error as Indexed).type === "requestErr") {
+                const customErr = error as err
+
+                if (customErr.desc.response) {
+                    const { reason }: { reason: string | undefined } = JSON.parse(
+                        customErr.desc.response as string
+                    )
+
+                    if (customErr.desc.status === 400 && reason) {
+                        bus.emit("updateChat:err", reason)
+                    }
+                }
+
+                if (customErr.desc.status === 401) {
+                    store.set("user", null)
+                    router.go("/")
+                }
+
+                if (customErr.desc.status === 500) {
+                    router.go("/500")
+                }
+            }
         }
     }
 
     public static async deleteChat(chatId: number) {
         try {
             const res = await chatApi.delete(chatId)
-
-            console.log(res)
 
             if (res.status !== 200) {
                 throw { type: "requestErr", desc: res }
@@ -98,8 +121,34 @@ export default class ChatService {
             actions.unsetActiveChat()
             ChatsService.getChats()
         } catch (error) {
-            // Логика обработки ошибок
             console.error(error)
+
+            if ((error as Indexed).type === "requestErr") {
+                const customErr = error as err
+
+                if (customErr.desc.response) {
+                    const { reason }: { reason: string | undefined } = JSON.parse(
+                        customErr.desc.response as string
+                    )
+
+                    if (customErr.desc.status === 400 && reason) {
+                        bus.emit("deleteChat:err", reason)
+                    }
+                }
+
+                if (customErr.desc.status === 401) {
+                    store.set("user", null)
+                    router.go("/")
+                }
+
+                if (customErr.desc.status === 403) {
+                    bus.emit("deleteChat:err", "Удаление недоступно!")
+                }
+
+                if (customErr.desc.status === 500) {
+                    router.go("/500")
+                }
+            }
         }
     }
 
@@ -111,17 +160,24 @@ export default class ChatService {
                 throw { type: "requestErr", desc: res }
             }
 
-            console.log(res)
-
             const { token } = JSON.parse(res.response)
 
             store.set("active_chat.token", token)
-
-            // Останавливаем крутилку
         } catch (error) {
-            // Логика обработки ошибок
             console.error(error)
-            // return error
+
+            if ((error as Indexed).type === "requestErr") {
+                const customErr = error as err
+
+                if (customErr.desc.status === 401) {
+                    store.set("user", null)
+                    router.go("/")
+                }
+
+                if (customErr.desc.status === 500) {
+                    router.go("/500")
+                }
+            }
         }
     }
 }

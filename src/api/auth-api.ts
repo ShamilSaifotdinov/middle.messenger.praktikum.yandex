@@ -11,12 +11,7 @@ export default class AuthAPI extends BaseAPI {
             throw new Error("RegistryAPI.create: need \"user\"")
         }
 
-        // public request(user: LoginRequest) {
-        // return authAPIInstance.post<LoginRequest, LoginResponse>('/login', user)
-        //     .then(({ user_id }) => user_id); // Обрабатываем получение данных из сервиса далее
         return this.HTTP.post("/signin", { data: user, withCredentials: true })
-        // .then((user_id) => console.log(user_id))
-        // Обрабатываем получение данных из сервиса далее
     }
 
     public getUser() {

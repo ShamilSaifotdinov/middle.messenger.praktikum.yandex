@@ -62,21 +62,26 @@ export default class UserRegistryService {
                 const customErr = error as err
 
                 if (customErr.type === "requestErr") {
-                    const { reason }: { reason: string } = JSON.parse(
-                        customErr.desc.response as string
-                    )
-                    console.error(reason)
+                    if (customErr.desc.response) {
+                        const { reason }: { reason: string | undefined } = JSON.parse(
+                            customErr.desc.response as string
+                        )
 
-                    if (customErr.desc.status === 400) {
-                        bus.emit("reqErr", reason)
+                        if (customErr.desc.status === 400 && reason) {
+                            bus.emit("reqErr", reason)
+                        }
+
+                        if (customErr.desc.status === 409 && reason) {
+                            const field = {
+                                "Login already exists": "login",
+                                "Email already exists": "email"
+                            }[reason]
+                            bus.emit("userIsExist", field)
+                        }
                     }
 
-                    if (customErr.desc.status === 409) {
-                        const field = {
-                            "Login already exists": "login",
-                            "Email already exists": "email"
-                        }[reason]
-                        bus.emit("userIsExist", field)
+                    if (customErr.desc.status === 500) {
+                        router.go("/500")
                     }
                 }
             }

@@ -56,6 +56,7 @@ export default class Login extends Block {
         })
 
         bus.on("badLogin", this.badLogin.bind(this))
+        bus.on("reqErr", this.reqError.bind(this))
     }
 
     badLogin() {
@@ -63,6 +64,11 @@ export default class Login extends Block {
         inputs.password.setProps({
             invalidMsg: "Неверный логин или пароль"
         })
+    }
+
+    reqError(reason: string) {
+        const inputs = this.props.form_inputs as Record<string, Block>
+        inputs.password.setProps({ invalidMsg: reason })
     }
 
     handleLogin(data: LoginFormModel) {
