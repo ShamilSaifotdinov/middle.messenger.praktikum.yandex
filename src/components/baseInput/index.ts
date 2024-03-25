@@ -1,4 +1,4 @@
-import Block, { Props } from "../../modules/block"
+import Block, { Props } from "../../utils/block"
 import "./baseInput.css"
 
 export default class BaseInput extends Block {

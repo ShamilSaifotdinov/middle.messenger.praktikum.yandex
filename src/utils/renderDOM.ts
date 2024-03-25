@@ -1,4 +1,4 @@
-import Block from "../modules/block"
+import Block from "./block"
 
 export default function render(query: string, block: Block): HTMLElement | null {
     const root: HTMLElement | null = document.querySelector(query)

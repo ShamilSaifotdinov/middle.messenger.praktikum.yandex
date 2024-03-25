@@ -1,5 +1,5 @@
-import Input from "../../../components/input"
-import Block, { Props } from "../../../modules/block"
+import Input from "../../../components/field"
+import Block, { Props } from "../../../utils/block"
 import tmp from "./tmp.hbs?raw"
 import "./details-row.css"
 
@@ -10,13 +10,18 @@ export interface PropsDetailsItem extends Props {
     type?: string
     pattern?: string
     desc?: string
+    isChangeable: boolean
 }
 
 export default class DetailsRow extends Block {
     constructor(props: PropsDetailsItem) {
         super("div", {
-            attrs: { class: "profile-details_item" },
+            isChangeable: props.isChangeable,
+            attrs: { class: "profile-details_item" + (props.isChangeable ? ""
+                : " profile-details_item-changeable"
+            ) },
             title: props.title,
+            value: props.value,
             input: new Input({
                 name: props.name,
                 value: props.value,
@@ -41,6 +46,15 @@ export default class DetailsRow extends Block {
                 }
             })
         })
+    }
+
+    componentDidUpdate(oldProps: PropsDetailsItem, newProps: PropsDetailsItem) {
+        if (oldProps.value !== newProps.value) {
+            (this.children.input as Input).setProps({ value: newProps.value })
+            return true
+        }
+
+        return false
     }
 
     render() {

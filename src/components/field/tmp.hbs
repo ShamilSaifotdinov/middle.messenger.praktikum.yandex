@@ -1,0 +1,7 @@
+{{#if labelText }}
+    <label for="{{ name }}" class="input-form_label{{#if isFile }} button button-blue{{/if}}">
+        {{ labelText }}
+    </label>
+{{/if}}
+{{{ input }}}
+{{#if invalidMsg }}<span class="input-form_invalidMsg">{{ invalidMsg }}</span>{{/if}}

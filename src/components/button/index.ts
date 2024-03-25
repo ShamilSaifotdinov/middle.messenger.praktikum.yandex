@@ -1,22 +1,29 @@
-import Block, { Props } from "../../modules/block.ts"
+import Block, { Props } from "../../utils/block.ts"
 import "./button.css"
 
 interface PropsButton extends Props {
     color?: string,
     type?: string
     class?: string
+    onClick?: EventListener
 }
 
 export default class Button extends Block {
     constructor(props: PropsButton) {
-        const attrs: Record<string, string> = {
+        props.attrs = {
             class: "button"
                 + (props.color ? ` button-${props.color}` : "")
                 + (props.class ? ` ${props.class}` : ""),
             ...(props.type && { type: props.type })
         }
 
-        super("button", { ...props, attrs })
+        if (props.onClick !== undefined) {
+            props.events = {
+                click: (e: Event) => (props.onClick as EventListener)(e)
+            }
+        }
+
+        super("button", props)
     }
 
     render() {

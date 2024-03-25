@@ -5,7 +5,18 @@
     align-items: center;
 }
 
+.profile-details_item-changeable
+{
+    border-bottom: 1px solid $deep_grey;
+    padding-block: .5625rem;
+}
+
 .profile-details_title, .profile-details_input
 {
     width: 50%;
+}
+
+.profile-details_title
+{
+    color: $grey_text;
 }

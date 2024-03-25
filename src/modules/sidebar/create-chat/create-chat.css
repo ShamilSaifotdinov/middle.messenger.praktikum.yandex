@@ -1,0 +1,28 @@
+.create-chat
+{
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    gap: 1.25rem;
+    align-items: center;
+}
+
+.create-chat_input
+{
+    width: 100%;
+}
+
+.users-list
+{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.create-chat_footer
+{
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    width: 100%;
+}

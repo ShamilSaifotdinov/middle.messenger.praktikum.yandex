@@ -1,0 +1,21 @@
+.edit-chat
+{
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.edit-chat_err-msg
+{
+    color: $red;
+}
+
+.edit-chat_footer
+{
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    width: 100%;
+}

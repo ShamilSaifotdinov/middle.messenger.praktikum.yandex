@@ -1,0 +1,13 @@
+<a href="/{{ id }}" class="chatlist-item{{#if active }} chatlist-item-active{{/if }}">
+    {{{ avatar }}}
+    <div class="chatlist-item_text">
+        <div class="chatlist-item_header">
+            <span class="chatlist-item_name"><b>{{ title }}</b></span>
+            <span class="chatlist-item_time">{{ last_message.time }}</span>
+        </div>
+        <div class="chatlist-item_content">
+            <span class="chatlist-item_msg">{{ last_message.content }}</span>
+            {{#if unread_count }}<div class="chatlist-item_msg-count">{{ unread_count }}</div>{{/if }}
+        </div>
+    </div>
+</a>

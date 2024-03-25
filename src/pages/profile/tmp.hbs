@@ -1,9 +1,23 @@
+{{{ updatePasswordModal }}}
+{{{ updateAvatarModal }}}
 <header class="profile_header">
-    <a class="profile_back" href="./chats.html"></a>
+    {{{ back }}}
+    {{{ logout }}}
 </header>
 <section class="profile_container">
     <div class="profile_content">
-        <div class="profile_avatar"></div>
-        {{{ form }}}
-    </div>
+        {{{ avatar }}}
+        {{#if isChangeable}}
+            {{{ form }}}
+        {{/if}}
+        {{#unless isChangeable}}
+            <div class="profile-details">
+                {{{ details }}}
+            </div>
+            <div class="profile-details_buttons">
+                {{{ changeProfile }}}
+                {{{ changePassword }}}
+            </div>
+        {{/unless}}
+    </div>    
 </section>

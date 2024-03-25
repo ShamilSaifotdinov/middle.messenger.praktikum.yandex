@@ -1,4 +1,4 @@
-import Block, { Props } from "../../modules/block"
+import Block, { Props } from "../../utils/block"
 import tmp from "./tmp.hbs?raw"
 import Button from "../../components/button"
 
@@ -21,7 +21,7 @@ export default class Form extends Block {
                 submit: (e: Event) => this.handleEvent(e)
             },
             inputs: props.inputs,
-            submit: new Button({
+            submit: props.submit_text && new Button({
                 text: props.submit_text,
                 type: "submit",
                 color: "blue",
