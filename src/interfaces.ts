@@ -62,6 +62,7 @@ export interface Chat extends Indexed {
     days?: Indexed[]
     content?: number
     token?: string
+    users?: User[]
 }
 
 export interface User extends Indexed {

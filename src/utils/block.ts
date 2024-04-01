@@ -1,17 +1,12 @@
 import { v4 as makeUUID } from "uuid"
 import EventBus from "./event-bus"
 import Templator from "./templator"
+import { Indexed } from "../interfaces"
+import isEqual from "./isEqual"
 
-export interface Props {
+export interface Props extends Indexed {
     events?: Record<string, EventListener>
     attrs?: Record<string, string>
-    [key: string]: unknown
-}
-
-interface Block {
-    componentDidMount?(oldProps: Props): boolean
-    componentDidUpdate?(oldProps: Props, newProps: Props): boolean
-    render(): DocumentFragment
 }
 
 interface Children { [key: string]: Block | Array<Block> | null }
@@ -23,20 +18,20 @@ const enum EVENTS {
     FLOW_RENDER = "flow:render"
 }
 
-class Block {
+abstract class Block<BlockProps extends Props = Props> {
     _element: HTMLElement
 
     _parentElement: ParentNode | null = null
 
     _meta: {
         tagName: string
-        props: Props
+        props: BlockProps
         children: Children
     }
 
     _id: string
 
-    props: Props
+    props: BlockProps
 
     children: Children
 
@@ -46,12 +41,15 @@ class Block {
 
     /** JSDoc
      * @param {string} tagName
-     * @param {Props} propsAndChildren
+     * @param {BlockProps} propsAndChildren
      *
      * @returns {void}
      */
-    constructor(tagName: string = "div", propsAndChildren: Props = {}) {
-        const { children, props } = this._getChildren(propsAndChildren)
+    constructor(tagName: string = "div", propsAndChildren: BlockProps = {} as BlockProps) {
+        const { children, props }:{
+            children: Children
+            props: BlockProps
+        } = this._getChildren(propsAndChildren)
 
         const eventBus = new EventBus()
 
@@ -63,8 +61,8 @@ class Block {
 
         this._id = makeUUID()
 
-        this.props = this._makePropsProxy({ ...props, __id: this._id }) as Props
-        this.children = this._makePropsProxy(children) as Children
+        this.props = this._makePropsProxy({ ...props, __id: this._id })
+        this.children = this._makePropsProxy(children)
 
         this._eventBus = () => eventBus
 
@@ -74,9 +72,9 @@ class Block {
         this._eventBus().emit(EVENTS.FLOW_RENDER)
     }
 
-    _getChildren(propsAndChildren: Record<string, unknown>) {
+    _getChildren(propsAndChildren: Partial<BlockProps>) {
         const children: Children = {}
-        const props: Props = {}
+        const props: BlockProps = {} as BlockProps
 
         Object.entries(propsAndChildren).forEach(([ key, value ]) => {
             if (
@@ -93,7 +91,7 @@ class Block {
             ) {
                 children[key] = value
             } else {
-                props[key] = value
+                props[key as keyof BlockProps] = value as BlockProps[keyof BlockProps]
             }
         })
 
@@ -105,6 +103,10 @@ class Block {
         eventBus.on(EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this))
         eventBus.on(EVENTS.FLOW_RENDER, this._render.bind(this))
     }
+
+    componentDidMount?(oldProps: BlockProps): boolean
+
+    componentDidUpdate?(oldProps: BlockProps, newProps: BlockProps): boolean
 
     _componentDidMount = () => {
         if (this.componentDidMount) {
@@ -152,7 +154,7 @@ class Block {
         this._eventBus().emit(EVENTS.FLOW_CDM)
     }
 
-    _componentDidUpdate(oldProps: Props, newProps: Props): void {
+    _componentDidUpdate(oldProps: BlockProps, newProps: BlockProps): void {
         if (this.componentDidUpdate) {
             const response = this.componentDidUpdate(oldProps, newProps)
             if (!response) {
@@ -163,7 +165,7 @@ class Block {
         this._eventBus().emit(EVENTS.FLOW_RENDER)
     }
 
-    setProps = (nextPropsAndChildren: Props): void => {
+    setProps(nextPropsAndChildren: Partial<BlockProps>): void {
         if (!nextPropsAndChildren) {
             return
         }
@@ -210,15 +212,15 @@ class Block {
         return this.element
     }
 
-    _makePropsProxy(props: Props | Children): Props | Children {
+    _makePropsProxy<T extends BlockProps | Children>(props: T): T {
         return new Proxy(props, {
-            get: (target: Props | Children, prop:string): unknown => {
+            get(target: T, prop:string): unknown {
                 const value = target[prop]
                 return (typeof value === "function") ? value.bind(target) : value
             },
 
-            set: (target: Props | Children, prop: string, value: unknown): boolean => {
-                if (target[prop] !== value) {
+            set: (target: T, prop: string, value: unknown): boolean => {
+                if (!isEqual(target[prop], value)) {
                     target[prop] = value
                     this._setUpdate = true
                 }
@@ -226,7 +228,7 @@ class Block {
                 return true
             },
 
-            deleteProperty: (): boolean => {
+            deleteProperty() {
                 throw new Error("Нет прав")
             }
         })
@@ -242,7 +244,7 @@ class Block {
     }
 
     compile(template: string, props: Props): DocumentFragment {
-        const propsAndStubs = { ...props }
+        const propsAndStubs: Indexed = { ...props }
 
         Object.entries(this.children).forEach(([ key, child ]) => {
             if (child instanceof Block) {

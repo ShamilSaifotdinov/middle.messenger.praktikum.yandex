@@ -17,7 +17,7 @@ interface PropsInput extends Props {
     value?: string
 }
 
-export default class Input extends Block {
+export default class Input extends Block<PropsInput> {
     value: string = ""
 
     constructor(props: PropsInput) {
@@ -67,7 +67,7 @@ export default class Input extends Block {
         })
     }
 
-    componentDidUpdate(oldProps: Props, newProps: Props) {
+    componentDidUpdate(oldProps: PropsInput, newProps: PropsInput) {
         const input = this.children.input as Block
         const attrs = { ...input._meta.props.attrs }
         if (oldProps.state !== newProps.state) {
@@ -80,7 +80,7 @@ export default class Input extends Block {
             input.setProps({ attrs })
         } else if (oldProps.value !== newProps.value) {
             if (newProps.value) {
-                input.setProps({ attrs: { ...attrs, value: newProps.value as string } })
+                input.setProps({ attrs: { ...attrs, value: newProps.value } })
             } else {
                 delete attrs.value
                 input.setProps({ attrs })

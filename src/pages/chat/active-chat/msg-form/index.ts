@@ -8,7 +8,7 @@ interface MsgFormProps extends Props {
     sendMessage: CallableFunction
 }
 
-export default class MsgForm extends Block {
+export default class MsgForm extends Block<MsgFormProps> {
     constructor(props: MsgFormProps) {
         super("form", {
             ...props,
@@ -42,7 +42,7 @@ export default class MsgForm extends Block {
                 throw validateData
             }
 
-            (this.props as MsgFormProps).sendMessage(data.message)
+            this.props.sendMessage(data.message)
         } catch (error) {
             console.error(error)
         }

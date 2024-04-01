@@ -17,7 +17,7 @@
         "noImplicitAny": true,
         "sourceMap": true,
         "strictNullChecks": true,
-        "types": [ "node" ]
+        "types": [ "mocha", "node" ]
     },
     "include": [
         "src"

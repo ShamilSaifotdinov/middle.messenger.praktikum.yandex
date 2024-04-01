@@ -1,7 +1,7 @@
-import isEqual from "../isEqual"
-import render from "../renderDOM"
+import isEqual from "../isEqual.ts"
+import render from "../renderDOM.ts"
 import Block from "../block"
-import { defaultTitle } from "../../global"
+import { defaultTitle } from "../../global.ts"
 import { BlockClass, BlockWithoutProps, OptionsWithProps, RouteOptions } from "./types"
 
 export default class Route<T extends BlockClass> {

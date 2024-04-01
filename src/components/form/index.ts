@@ -8,7 +8,7 @@ interface PropsForm extends Props {
     onSubmit?: Function
 }
 
-export default class Form extends Block {
+export default class Form extends Block<PropsForm> {
     constructor(props: PropsForm) {
         const attrs = {
             ...(props.class && { class: props.class })
@@ -38,10 +38,8 @@ export default class Form extends Block {
             new FormData(this.element as HTMLFormElement).entries()
         )
 
-        const props = this.props as PropsForm
-
-        if (props.onSubmit) {
-            props.onSubmit(data)
+        if (this.props.onSubmit) {
+            this.props.onSubmit(data)
         }
     }
 

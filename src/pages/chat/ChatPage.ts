@@ -9,7 +9,7 @@ import actions from "../../store/actions"
 
 interface ChatPageProps extends Props { active_chat?: Chat }
 
-export default class ChatPage extends Block {
+export default class ChatPage extends Block<ChatPageProps> {
     constructor(props: ChatPageProps) {
         super("div", {
             ...props,
@@ -18,15 +18,13 @@ export default class ChatPage extends Block {
     }
 
     componentDidUpdate(oldProps: ChatPageProps, newProps: ChatPageProps): boolean {
-        const currentActiveChat = this.children.activeChat as ActiveChat
+        const currentActiveChat = this.children.activeChat as ActiveChat | null
         if (newProps.active_chat) {
             if (
                 !oldProps.active_chat
                 || oldProps.active_chat.id !== newProps.active_chat.id
             ) {
-                if (currentActiveChat && currentActiveChat.props.websocket) {
-                    (currentActiveChat.props.websocket as WS).close()
-                }
+                currentActiveChat?.props.websocket?.close()
 
                 this.setProps({ activeChat: new ActiveChat({
                     active_chat: newProps.active_chat
@@ -57,20 +55,20 @@ export default class ChatPage extends Block {
                     }`
                 )
 
-                currentActiveChat.setProps({ websocket: ws })
+                currentActiveChat?.setProps({ websocket: ws })
 
                 return true
             }
 
             if (oldProps.active_chat) {
-                currentActiveChat.setProps({
+                currentActiveChat?.setProps({
                     active_chat: newProps.active_chat
                 })
             }
         }
 
         if (oldProps.active_chat && !newProps.active_chat) {
-            (currentActiveChat.props.websocket as WS).close()
+            currentActiveChat?.props.websocket?.close()
             this.setProps({ activeChat: undefined })
 
             return true

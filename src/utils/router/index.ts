@@ -1,5 +1,5 @@
-import Route from "./route"
-import { AuthMode, BlockClass, RouteOptions, RouterOptions } from "./types"
+import Route from "./route.ts"
+import { AuthMode, BlockClass, RouteOptions, RouterOptions } from "./types.ts"
 
 class Router {
     private routes: Route<BlockClass>[]
