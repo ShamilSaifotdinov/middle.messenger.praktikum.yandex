@@ -11,8 +11,12 @@
     "build": "npm run prebuild && vite build",
     "preview": "vite preview",
     "start": "npm run build && node server.js",
-    "prepare": "husky",
     "precommit": "npm-run-all test lint prebuild"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run test"
+    }
   },
   "engines": {
     "node": "18.17.1"
