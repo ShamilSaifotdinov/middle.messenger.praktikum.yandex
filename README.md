@@ -42,6 +42,12 @@ npm run build
 ```
 npm run start
 ```
+Запуск тестов, линтинга и проверки типов:
+```
+npm run prepare
+
+npm run precommit
+```
 
 ## Использованные технологии
 
@@ -52,6 +58,10 @@ Typscript
 Препроцессор PostCSS
 
 Сборщик проекта Vite
+
+Тестовый фреймворк Mocha
+
+Библиотеки Chai и Sinon
 
 ## Функции
 
