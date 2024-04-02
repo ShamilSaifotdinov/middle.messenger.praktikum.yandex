@@ -1,8 +1,8 @@
 import { v4 as makeUUID } from "uuid"
-import EventBus from "./event-bus"
-import Templator from "./templator"
+import EventBus from "./event-bus.ts"
+import Templator from "./templator.ts"
 import { Indexed } from "../interfaces"
-import isEqual from "./isEqual"
+import isEqual from "./isEqual.ts"
 
 export interface Props extends Indexed {
     events?: Record<string, EventListener>
@@ -19,6 +19,8 @@ const enum EVENTS {
 }
 
 abstract class Block<BlockProps extends Props = Props> {
+    // #region Meta
+
     _element: HTMLElement
 
     _parentElement: ParentNode | null = null
@@ -31,13 +33,19 @@ abstract class Block<BlockProps extends Props = Props> {
 
     _id: string
 
+    // #endregion
+
     props: BlockProps
 
     children: Children
 
+    // #region Update
+
     _eventBus: Function
 
     _setUpdate: boolean = false
+
+    // #endregion
 
     /** JSDoc
      * @param {string} tagName
@@ -72,6 +80,8 @@ abstract class Block<BlockProps extends Props = Props> {
         this._eventBus().emit(EVENTS.FLOW_RENDER)
     }
 
+    // #region Init
+
     _getChildren(propsAndChildren: Partial<BlockProps>) {
         const children: Children = {}
         const props: BlockProps = {} as BlockProps
@@ -90,8 +100,16 @@ abstract class Block<BlockProps extends Props = Props> {
                 )
             ) {
                 children[key] = value
+
+                if (this.props && this.props[key]) {
+                    props[key as keyof BlockProps] = undefined as BlockProps[keyof BlockProps]
+                }
             } else {
                 props[key as keyof BlockProps] = value as BlockProps[keyof BlockProps]
+
+                if (this.children && this.children[key]) {
+                    children[key] = null
+                }
             }
         })
 
@@ -104,13 +122,17 @@ abstract class Block<BlockProps extends Props = Props> {
         eventBus.on(EVENTS.FLOW_RENDER, this._render.bind(this))
     }
 
-    componentDidMount?(oldProps: BlockProps): boolean
+    // #endregion
+
+    componentDidMount?(): void
 
     componentDidUpdate?(oldProps: BlockProps, newProps: BlockProps): boolean
 
-    _componentDidMount = () => {
+    // #region DidMount
+
+    _componentDidMount() {
         if (this.componentDidMount) {
-            this.componentDidMount(this.props)
+            this.componentDidMount()
         }
 
         Object.values(this.children).forEach((child) => {
@@ -150,9 +172,13 @@ abstract class Block<BlockProps extends Props = Props> {
         })
     }
 
+    // #endregion
+
     dispatchComponentDidMount() {
         this._eventBus().emit(EVENTS.FLOW_CDM)
     }
+
+    // #region DidUpdate
 
     _componentDidUpdate(oldProps: BlockProps, newProps: BlockProps): void {
         if (this.componentDidUpdate) {
@@ -165,8 +191,10 @@ abstract class Block<BlockProps extends Props = Props> {
         this._eventBus().emit(EVENTS.FLOW_RENDER)
     }
 
+    // #endregion
+
     setProps(nextPropsAndChildren: Partial<BlockProps>): void {
-        if (!nextPropsAndChildren) {
+        if (!nextPropsAndChildren || Object.keys(nextPropsAndChildren).length === 0) {
             return
         }
 
@@ -195,6 +223,8 @@ abstract class Block<BlockProps extends Props = Props> {
         return this.compile("{{{ children }}}", this.props)
     }
 
+    // #region Render
+
     _render(): void {
         const block = this.render()
 
@@ -208,9 +238,13 @@ abstract class Block<BlockProps extends Props = Props> {
         this._addAttributes()
     }
 
+    // #endregion
+
     getContent(): HTMLElement {
         return this.element
     }
+
+    // #region Compile
 
     _makePropsProxy<T extends BlockProps | Children>(props: T): T {
         return new Proxy(props, {
@@ -242,6 +276,8 @@ abstract class Block<BlockProps extends Props = Props> {
 
         return element
     }
+
+    // #endregion
 
     compile(template: string, props: Props): DocumentFragment {
         const propsAndStubs: Indexed = { ...props }

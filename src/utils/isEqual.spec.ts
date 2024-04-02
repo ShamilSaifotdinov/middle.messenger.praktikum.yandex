@@ -1,7 +1,7 @@
 import { expect } from "chai"
 import isEqual from "./isEqual.ts"
 
-describe.skip("isEqual", () => {
+describe("isEqual", () => {
     describe("Примитивы", () => {
         it("Две одинаковые строки", () => {
             const a = "str"
@@ -185,6 +185,13 @@ describe.skip("isEqual", () => {
                 const b = null
 
                 return expect(isEqual(a, b)).to.be.false
+            })
+
+            it("Два объекта с null и undefined", () => {
+                const a = { c: "test" }
+                const b = { c: "test", d: null }
+
+                return expect(isEqual(a, b)).to.be.true
             })
 
             class Test {}

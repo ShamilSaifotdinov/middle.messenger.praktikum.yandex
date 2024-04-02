@@ -51,8 +51,8 @@ function isEqual(
         }
 
         if (isObject(a) && isObject(b)) {
-            const aKeys = Object.keys(a)
-            const bKeys = Object.keys(b)
+            const aKeys = Object.keys(a).filter((key) => a[key] !== null && a[key] !== undefined)
+            const bKeys = Object.keys(b).filter((key) => b[key] !== null && b[key] !== undefined)
 
             const uniqKeys = new Set([ ...aKeys, ...bKeys ])
             if (!(aKeys.length === uniqKeys.size && bKeys.length === uniqKeys.size)) {
