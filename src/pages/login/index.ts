@@ -1,23 +1,29 @@
 import Link from "../../components/link"
 import Input from "../../components/field"
-import Block from "../../utils/block"
+import Block, { Props } from "../../utils/block"
 import tmp from "./tmp.hbs?raw"
 import Form from "../../components/form"
 import { bus, fields } from "../../global"
 import UserLoginService from "../../services/user-login"
 import { LoginFormModel } from "../../interfaces"
 
-const localFields = [ "login", "password" ]
+const localFields = [ "login", "password" ] as const
 
-export default class Login extends Block {
+type FormInputs = { [key in typeof localFields[number]]: Input }
+
+interface LoginProps extends Props {
+    form_inputs: FormInputs
+}
+
+export default class Login extends Block<LoginProps> {
     constructor() {
-        const setInput = (key: string):Input => (
+        const setInput = (key: typeof localFields[number]): Input => (
             new Input({
                 labelText: fields[key].label,
                 name: key,
                 type: fields[key].type,
                 onBlur: (value : string) => {
-                    const inputs = this.props.form_inputs as Record<string, Block>
+                    const inputs = this.props.form_inputs
                     if (value.length === 0) {
                         inputs[key].setProps({
                             invalidMsg: "Обязательное значение",
@@ -33,10 +39,10 @@ export default class Login extends Block {
             })
         )
 
-        const inputs = localFields.reduce((obj, key) => ({
+        const inputs = localFields.reduce<FormInputs>((obj, key) => ({
             ...obj,
             [key]: setInput(key)
-        }), {})
+        }), {} as FormInputs)
 
         super("div", {
             attrs: {
@@ -60,24 +66,25 @@ export default class Login extends Block {
     }
 
     badLogin() {
-        const inputs = this.props.form_inputs as Record<string, Block>
+        const inputs = this.props.form_inputs
         inputs.password.setProps({
             invalidMsg: "Неверный логин или пароль"
         })
     }
 
     reqError(reason: string) {
-        const inputs = this.props.form_inputs as Record<string, Block>
+        const inputs = this.props.form_inputs
         inputs.password.setProps({ invalidMsg: reason })
     }
 
     handleLogin(data: LoginFormModel) {
         let isInvalid = false
+        const inputs = this.props.form_inputs
+
         Object.keys(data).forEach((key) => {
-            const inputs = this.props.form_inputs as Record<string, Block>
-            if (typeof data[key] === "string" && (data[key] as string).length === 0) {
+            if (typeof data[key] === "string" && data[key].length === 0) {
                 isInvalid = true
-                inputs[key].setProps({
+                inputs[key as typeof localFields[number]].setProps({
                     invalidMsg: "Обязательное значение",
                     state: false
                 })

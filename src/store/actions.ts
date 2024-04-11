@@ -4,7 +4,7 @@ import ChatService from "../services/chat-service"
 import { getLocalHourAndMinuteFromISO } from "../utils/getLocal"
 import { isObject } from "../utils/types"
 
-type days = Array<{
+type daysType = Array<{
     messages: Indexed[]
 }>
 
@@ -23,6 +23,7 @@ class Actions {
         store.set("chats", chats)
 
         if (activeChat) {
+            this.unsetActiveChat()
             this.setActiveChat(activeChat.id)
         }
     }
@@ -60,8 +61,8 @@ class Actions {
 
     addMessages(data: unknown) {
         const state = store.getState()
-        const activeChat = state.active_chat as Indexed
-        const days = activeChat.days as days
+        const activeChat = state.active_chat as Chat
+        const days = activeChat.days as daysType
 
         // console.log(data)
 

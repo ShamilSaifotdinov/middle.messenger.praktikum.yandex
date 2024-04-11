@@ -8,7 +8,7 @@ interface PropsButton extends Props {
     onClick?: EventListener
 }
 
-export default class Button extends Block {
+export default class Button extends Block<PropsButton> {
     constructor(props: PropsButton) {
         props.attrs = {
             class: "button"

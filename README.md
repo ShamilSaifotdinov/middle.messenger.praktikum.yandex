@@ -22,15 +22,19 @@ https://www.figma.com/file/7YpDCAyyN1pABc652yZdAn/middle.messenger.praktikum.yan
 
 ## Запуск проекта
 
-Запуска проекта в режиме разработки:
+Запуск проекта в режиме разработки:
 ```
 npm run dev
 ```
-Запуска линтинга:
+Запуск линтинга:
 ```
 npm run lint
 ```
-Запуска проверки типов:
+Запуск тестов:
+```
+npm run test
+```
+Запуск проверки типов:
 ```
 npm run prebuild
 ```
@@ -42,6 +46,12 @@ npm run build
 ```
 npm run start
 ```
+Запуск тестов, линтинга и проверки типов:
+```
+npm run prepare
+
+npm run precommit
+```
 
 ## Использованные технологии
 
@@ -52,6 +62,10 @@ Typscript
 Препроцессор PostCSS
 
 Сборщик проекта Vite
+
+Тестовый фреймворк Mocha
+
+Библиотеки Chai и Sinon
 
 ## Функции
 

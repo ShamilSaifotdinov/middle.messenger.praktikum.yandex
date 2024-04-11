@@ -1,5 +1,5 @@
 import { Indexed } from "../interfaces"
-import { isObject, isObjectOrArray } from "./types"
+import { isObject, isObjectOrArray } from "./types.ts"
 
 function getParams(obj: Indexed | unknown[], parentPath?: string): string[] {
     const result = []

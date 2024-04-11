@@ -1,36 +1,74 @@
-import { Indexed } from "../interfaces"
-import { isObjectOrArray } from "./types"
+import { isArray, isObject, isObjectOrArray } from "./types.ts"
 
 function isEqual(
-    a: Indexed | unknown[] | string | number | boolean,
-    b: Indexed | unknown[] | string | number | boolean
+    a: unknown,
+    b: unknown
 ): boolean {
+    if ((a === undefined || a === null) && (b === undefined || b === null)) {
+        return true
+    }
+
     if (typeof a !== typeof b) {
         return false
     }
 
-    if (typeof a === "string" || typeof a === "number" || typeof a === "boolean") {
+    if (
+        typeof a === "string"
+        || typeof a === "boolean"
+        || (typeof a === "number" && !Number.isNaN(a) && !Number.isNaN(b))
+    ) {
         return a === b
     }
 
-    const aKeys = Object.keys(a)
-    const bKeys = Object.keys(b)
-    const uniqKeys = new Set([ ...aKeys, ...bKeys ])
-    if (!(aKeys.length === uniqKeys.size && bKeys.length === uniqKeys.size)) {
-        return false
-    }
+    if (a !== b) {
+        if (typeof a === "function" && typeof b === "function") {
+            return a.toString() === b.toString()
+        }
 
-    for (const [ key, aValue ] of Object.entries(a)) {
-        const bValue = b[key as keyof typeof b]
-
-        if (isObjectOrArray(aValue) && isObjectOrArray(bValue)) {
-            if (!isEqual(aValue, bValue)) {
-                return false
-            }
-        } else if (aValue !== bValue) {
+        if (
+            typeof a === "object"
+            && (
+                !isObjectOrArray(a)
+                || !isObjectOrArray(b)
+                || isArray(a) !== isArray(b)
+            )
+        ) {
             return false
         }
+
+        if (isArray(a) && isArray(b)) {
+            if (a.length !== b.length) {
+                return false
+            }
+
+            for (const [ index, aValue ] of a.entries()) {
+                const bValue = b[index]
+
+                if (!isEqual(aValue, bValue)) {
+                    return false
+                }
+            }
+        }
+
+        if (isObject(a) && isObject(b)) {
+            const aKeys = Object.keys(a).filter((key) => a[key] !== null && a[key] !== undefined)
+            const bKeys = Object.keys(b).filter((key) => b[key] !== null && b[key] !== undefined)
+
+            const uniqKeys = new Set([ ...aKeys, ...bKeys ])
+            if (!(aKeys.length === uniqKeys.size && bKeys.length === uniqKeys.size)) {
+                return false
+            }
+
+            for (const [ key, aValue ] of Object.entries(a)) {
+                const bValue = b[key]
+
+                if (!isEqual(aValue, bValue)) {
+                    return false
+                }
+            }
+        }
     }
+
     return true
 }
 

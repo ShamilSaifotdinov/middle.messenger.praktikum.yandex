@@ -17,14 +17,17 @@ import UpdateAvatar from "./update-avatar"
 
 const localFields = [ "first_name", "second_name", "display_name", "login", "email", "phone" ]
 
+type DetailsRowsType = Record<string, DetailsRow>
+
 interface PropsProfileDetails extends Props {
     profile: ProfileFormModel
     isChangeable?: boolean
+    updateAvatarModal: Block | null
+    detailsChangeableRows: DetailsRowsType
+    detailsRows: DetailsRowsType
 }
 
-type DetailsRowsType = Record<string, DetailsRow>
-
-export default class ProfilePage extends Block {
+export default class ProfilePage extends Block<PropsProfileDetails> {
     constructor(props: PropsProfileDetails) {
         props.isChangeable = false
 
@@ -110,11 +113,11 @@ export default class ProfilePage extends Block {
         if (!isEqual(oldProps.profile, newProps.profile)) {
             localFields.forEach((key) => {
                 if (oldProps.profile[key] !== newProps.profile[key]) {
-                    (this.props.detailsRows as DetailsRowsType)[key].setProps({
+                    this.props.detailsRows[key].setProps({
                         value: newProps.profile[key]
-                    });
+                    })
 
-                    (this.props.detailsChangeableRows as DetailsRowsType)[key].setProps({
+                    this.props.detailsChangeableRows[key].setProps({
                         value: newProps.profile[key]
                     })
                 }
@@ -122,7 +125,7 @@ export default class ProfilePage extends Block {
         }
 
         if (oldProps.profile.avatar !== newProps.profile.avatar) {
-            (this.children as Record<string, Block>).avatar.setProps({
+            (this.children.avatar as Block | null)?.setProps({
                 src: newProps.profile.avatar && (
                     "https://ya-praktikum.tech/api/v2/resources" + newProps.profile.avatar
                 )
@@ -133,8 +136,8 @@ export default class ProfilePage extends Block {
     }
 
     reqError(reason: string) {
-        const inputs = this.props.detailsChangeableRows as DetailsRowsType
-        ((inputs.phone as DetailsRow).children.input as Block).setProps({ invalidMsg: reason })
+        const inputs = this.props.detailsChangeableRows;
+        (inputs.phone.children.input as Block | null)?.setProps({ invalidMsg: reason })
     }
 
     handleUpdateProfile(data: ProfileFormModel) {

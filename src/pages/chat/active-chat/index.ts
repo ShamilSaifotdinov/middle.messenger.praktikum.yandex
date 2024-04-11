@@ -17,7 +17,7 @@ interface ActiveChatProps extends Props {
     websocket?: WS
 }
 
-export default class ActiveChat extends Block {
+export default class ActiveChat extends Block<ActiveChatProps> {
     constructor(props: ActiveChatProps) {
         super("div", {
             ...props,
@@ -70,12 +70,10 @@ export default class ActiveChat extends Block {
             newProps.websocket.connect()
 
             newProps.websocket.on(WSEvents.open, () => {
-                if (newProps.websocket) {
-                    newProps.websocket.send({
-                        content: "0",
-                        type: "get old"
-                    })
-                }
+                newProps.websocket?.send({
+                    content: "0",
+                    type: "get old"
+                })
             })
         }
 
@@ -102,11 +100,10 @@ export default class ActiveChat extends Block {
     }
 
     getOldMessages() {
-        const props = this.props as ActiveChatProps
-        const { content } = props.active_chat
+        const { content } = this.props.active_chat
 
-        if (typeof content === "number" && props.websocket) {
-            props.websocket.send({
+        if (typeof content === "number") {
+            this.props.websocket?.send({
                 content: ((content + 1) * 20).toString(),
                 type: "get old"
             })
@@ -114,13 +111,10 @@ export default class ActiveChat extends Block {
     }
 
     sendMessage(content: string) {
-        const props = this.props as ActiveChatProps
-        if (props.websocket) {
-            props.websocket.send({
-                content,
-                type: "message"
-            })
-        }
+        this.props.websocket?.send({
+            content,
+            type: "message"
+        })
     }
 
     render() {

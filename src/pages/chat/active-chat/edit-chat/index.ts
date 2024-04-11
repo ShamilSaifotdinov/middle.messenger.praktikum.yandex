@@ -21,7 +21,7 @@ interface EditChatProps extends Props {
     newAvatar?: File
 }
 
-export default class EditChat extends Block {
+export default class EditChat extends Block<EditChatProps> {
     constructor(props: EditChatProps) {
         const input = new Input({
             type: "file",
@@ -97,11 +97,11 @@ export default class EditChat extends Block {
         if (
             (!oldProps.users && newProps.users)
             || (
-                newProps.users
-                && !isEqual(oldProps.users as unknown[], newProps.users as unknown[])
+                newProps.users && oldProps.users
+                && !isEqual(oldProps.users, newProps.users)
             )
         ) {
-            (this.children.userRows as UsersList).setProps({ oldUsers: newProps.users })
+            (this.children.userRows as UsersList | null)?.setProps({ oldUsers: newProps.users })
         }
         return true
     }
@@ -112,10 +112,9 @@ export default class EditChat extends Block {
     }
 
     handleUpdateChat() {
-        const props = this.props as EditChatProps
         const data: UpdateChatModel = {}
-        if (props.newAvatar) {
-            data.avatar = props.newAvatar
+        if (this.props.newAvatar) {
+            data.avatar = this.props.newAvatar
         }
 
         const children = this.children as Record<string, Block>
@@ -124,7 +123,7 @@ export default class EditChat extends Block {
             children.userRows.children.userRows as Block
         ).children.checkedUsers as Block[]
 
-        const oldUsers = new Set((props.users as User[]).map((user) => user.id))
+        const oldUsers = new Set(this.props.users?.map((user) => user.id))
         const newUsers = new Set(userrows.map((user) => (user.props as User).id))
 
         const addUsers = Array.from(getDifference<number>(newUsers, oldUsers))

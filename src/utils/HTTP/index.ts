@@ -1,4 +1,4 @@
-import queryStringify from "../queryString"
+import queryStringify from "../queryString.ts"
 
 const enum METHODS {
     GET = "GET",
